@@ -1,3 +1,5 @@
+if "fav_status" not in st.session_state:
+    st.session_state.fav_status = {}
 import streamlit as st
 from supabase import create_client
 
@@ -66,12 +68,18 @@ if st.user.is_logged_in:
                     st.caption(f"文本：{record['text_snippet']}...")
                 
                 with col2:
-                    if st.button("⭐" if not record.get("is_favorite") else "取消", key=f"fav_{record_id}"):
+                    # 先用 session_state 里最新的状态，没有就用数据库里的
+                    current_fav = st.session_state.fav_status.get(record_id, record.get("is_favorite"))
+                    
+                    if st.button("⭐" if not current_fav else "取消", key=f"fav_{record_id}"):
+                        new_status = not current_fav
                         supabase.table("detection_history")\
-                            .update({"is_favorite": not record.get("is_favorite")})\
+                            .update({"is_favorite": new_status})\
                             .eq("id", record_id)\
                             .execute()
-                        st.success("已更新收藏状态")
+                        # 立刻更新本地状态，马上反映到页面上
+                        st.session_state.fav_status[record_id] = new_status
+                        st.success("已更新收藏")
                         st.rerun()
             
                 with col3:
