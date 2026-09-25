@@ -1,10 +1,11 @@
-if "fav_status" not in st.session_state:
-    st.session_state.fav_status = {}
 import streamlit as st
 from supabase import create_client
 
 supabase = create_client(st.secrets["supabase"]["url"], st.secrets["supabase"]["key"])
 
+if "fav_status" not in st.session_state:
+    st.session_state.fav_status = {}
+    
 ADMIN_EMAIL = "pseebat0312@gmail.com"
 
 st.set_page_config(page_title="西班牙留学生工具站", page_icon="🇪🇸")
