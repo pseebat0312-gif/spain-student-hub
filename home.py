@@ -39,20 +39,45 @@ if st.user.is_logged_in:
     st.write(f"欢迎回来，{st.user.email}")
     # 查看历史记录
     if st.button("📜 查看我的检测历史"):
-        response = supabase.table("detection_history")\
-            .select("*")\
-            .eq("user_email", st.user.email)\
-            .order("created_at", desc=True)\
-            .execute()
-        
-        if response.data:
-            st.write(f"共 {len(response.data)} 条记录：")
-            for record in response.data:
-                st.write(f"**时间：** {record['created_at'][:19]} | **AI概率：** {record['ai_probability']:.2%}")
-                st.caption(f"文本片段：{record['text_snippet']}...")
-                st.divider()
-        else:
-            st.info("你还没有检测记录。")
+        # 查询条件
+        query = supabase.table("detection_history")\
+        .select("*")\
+        .eq("user_email", st.user.email)\
+        .order("created_at", desc=True)
+
+    # 只看收藏的开关
+    only_fav = st.checkbox("⭐ 只看收藏")
+    if only_fav:
+        query = query.eq("is_favorite", True)
+
+    # 执行查询
+    response = query.execute()
+
+    if response.data:
+        st.write(f"共 {len(response.data)} 条记录：")
+        for record in response.data:
+            col1, col2, col3 = st.columns([6, 1, 1])
+            with col1:
+                fav = "⭐" if record.get("is_favorite") else ""
+                st.write(f"{fav} **时间：** {record['created_at'][:19]} | **AI概率：** {record['ai_probability']:.2%}")
+                st.caption(f"文本：{record['text_snippet']}...")
+            with col2:
+                if st.button("⭐" if not record.get("is_favorite") else "取消", key=f"fav_{record['id']}"):
+                    supabase.table("detection_history")\
+                        .update({"is_favorite": not record.get("is_favorite")})\
+                        .eq("id", record["id"])\
+                        .execute()
+                    st.rerun()
+            with col3:
+                if st.button("🗑️", key=f"del_{record['id']}"):
+                    supabase.table("detection_history")\
+                        .delete()\
+                        .eq("id", record["id"])\
+                        .execute()
+                    st.rerun()
+            st.divider()
+    else:
+        st.info("你还没有检测记录。")
 
 # ===== 个人资料设置 =====
 st.divider()
