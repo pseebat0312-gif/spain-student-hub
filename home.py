@@ -56,25 +56,30 @@ if st.user.is_logged_in:
     if response.data:
         st.write(f"共 {len(response.data)} 条记录：")
         for record in response.data:
+            record_id = record["id"]
+            
             col1, col2, col3 = st.columns([6, 1, 1])
             with col1:
                 fav = "⭐" if record.get("is_favorite") else ""
                 st.write(f"{fav} **时间：** {record['created_at'][:19]} | **AI概率：** {record['ai_probability']:.2%}")
                 st.caption(f"文本：{record['text_snippet']}...")
+            
             with col2:
-                if st.button("⭐" if not record.get("is_favorite") else "取消", key=f"fav_{record['id']}"):
+                if st.button("⭐" if not record.get("is_favorite") else "取消", key=f"fav_{record_id}"):
                     supabase.table("detection_history")\
                         .update({"is_favorite": not record.get("is_favorite")})\
-                        .eq("id", record["id"])\
+                        .eq("id", record_id)\
                         .execute()
                     st.rerun()
+            
             with col3:
-                if st.button("🗑️", key=f"del_{record['id']}"):
+                if st.button("🗑️", key=f"del_{record_id}"):
                     supabase.table("detection_history")\
                         .delete()\
-                        .eq("id", record["id"])\
+                        .eq("id", record_id)\
                         .execute()
                     st.rerun()
+            
             st.divider()
     else:
         st.info("你还没有检测记录。")
