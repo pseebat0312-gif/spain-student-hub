@@ -16,7 +16,13 @@ with st.sidebar:
         if st.button("使用 Google 登录"):
             st.login()
     else:
-        st.success(f"👤 {st.user.name}")
+        profile = supabase.table("user_profiles")\
+                .select("nickname")\
+                .eq("email", st.user.email)\
+                .execute()
+            
+        display_name = profile.data[0]["nickname"] if profile.data and profile.data[0].get("nickname") else st.user.name
+        st.success(f"👤 {display_name}")
         if st.button("退出登录"):
             st.logout()
 
@@ -41,6 +47,39 @@ if st.user.is_logged_in:
                 st.divider()
         else:
             st.info("你还没有检测记录。")
+
+# ===== 个人资料设置 =====
+st.divider()
+st.subheader("👤 个人资料设置")
+
+# 读取当前用户的资料
+response = supabase.table("user_profiles")\
+    .select("*")\
+    .eq("email", st.user.email)\
+    .execute()
+
+# 如果没记录，就用默认值
+if response.data:
+    current_nickname = response.data[0].get("nickname", "")
+    current_avatar = response.data[0].get("avatar_url", "")
+else:
+    current_nickname = ""
+    current_avatar = ""
+
+# 输入昵称
+new_nickname = st.text_input("昵称：", value=current_nickname)
+
+# 输入头像链接
+new_avatar = st.text_input("头像图片链接（可选）：", value=current_avatar)
+
+if st.button("💾 保存资料"):
+    supabase.table("user_profiles").upsert({
+        "email": st.user.email,
+        "nickname": new_nickname,
+        "avatar_url": new_avatar
+    }).execute()
+    st.success("✅ 资料已保存")
+    st.rerun()  # 刷新页面
 
     # === 会员状态区 ===
     col1, col2 = st.columns(2)
