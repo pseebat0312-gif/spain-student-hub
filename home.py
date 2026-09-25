@@ -15,7 +15,7 @@ def get_history(user_email):
         .execute().data
 
 if "local_fav" not in st.session_state:
-    st.session_states.local_fav=[]
+    st.session_state.local_fav=[]
 
 ADMIN_EMAIL = "pseebat0312@gmail.com"
 
