@@ -1,4 +1,7 @@
 import streamlit as st
+from supabase import create_client
+
+supabase = create_client(st.secrets["supabase"]["url"], st.secrets["supabase"]["key"])
 
 st.set_page_config(page_title="西班牙留学生工具站", page_icon="🇪🇸")
 st.title("🇪🇸 西班牙留学生一站式工具站")
@@ -20,6 +23,22 @@ if st.user.is_logged_in:
     st.divider()
     st.subheader("📂 我的专属空间")
     st.write(f"欢迎回来，{st.user.email}")
+    # 查看历史记录
+    if st.button("📜 查看我的检测历史"):
+        response = supabase.table("detection_history")\
+            .select("*")\
+            .eq("user_email", st.user.email)\
+            .order("created_at", desc=True)\
+            .execute()
+        
+        if response.data:
+            st.write(f"共 {len(response.data)} 条记录：")
+            for record in response.data:
+                st.write(f"**时间：** {record['created_at'][:19]} | **AI概率：** {record['ai_probability']:.2%}")
+                st.caption(f"文本片段：{record['text_snippet']}...")
+                st.divider()
+        else:
+            st.info("你还没有检测记录。")
 
     # === 会员状态区 ===
     col1, col2 = st.columns(2)
