@@ -41,17 +41,17 @@ if st.user.is_logged_in:
     if st.button("📜 查看我的检测历史"):
         # 查询条件
         query = supabase.table("detection_history")\
-        .select("*")\
-        .eq("user_email", st.user.email)\
-        .order("created_at", desc=True)
+            .select("*")\
+            .eq("user_email", st.user.email)\
+            .order("created_at", desc=True)
 
     # 只看收藏的开关
-    only_fav = st.checkbox("⭐ 只看收藏")
-    if only_fav:
-        query = query.eq("is_favorite", True)
+        only_fav = st.checkbox("⭐ 只看收藏")
+        if only_fav:
+            query = query.eq("is_favorite", True)
 
     # 执行查询
-    response = query.execute()
+        response = query.execute()
 
     if response.data:
         st.write(f"共 {len(response.data)} 条记录：")
