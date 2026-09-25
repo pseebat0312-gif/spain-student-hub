@@ -58,28 +58,34 @@ response = supabase.table("user_profiles")\
     .eq("email", st.user.email)\
     .execute()
 
-# 如果没记录，就用默认值
 if response.data:
     current_nickname = response.data[0].get("nickname", "")
-    current_avatar = response.data[0].get("avatar_url", "")
+    current_emoji = response.data[0].get("avatar_emoji", "🐱")
 else:
     current_nickname = ""
-    current_avatar = ""
+    current_emoji = "🐱"
 
-# 输入昵称
+# 昵称输入
 new_nickname = st.text_input("昵称：", value=current_nickname)
 
-# 输入头像链接
-new_avatar = st.text_input("头像图片链接（可选）：", value=current_avatar)
+# Emoji 头像选择
+emoji_options = ["🐱", "🐶", "🦊", "🐼", "🐸", "🦁", "🐯", "🐨", 
+                 "🌸", "🌈", "⭐", "🌙", "☀️", "🍀", "🎵", "🍕"]
+new_emoji = st.selectbox(
+    "选择一个头像：",
+    emoji_options,
+    index=emoji_options.index(current_emoji) if current_emoji in emoji_options else 0
+)
 
+# 保存按钮
 if st.button("💾 保存资料"):
     supabase.table("user_profiles").upsert({
         "email": st.user.email,
         "nickname": new_nickname,
-        "avatar_url": new_avatar
+        "avatar_emoji": new_emoji
     }).execute()
     st.success("✅ 资料已保存")
-    st.rerun()  # 刷新页面
+    st.rerun()
 
     # === 会员状态区 ===
     col1, col2 = st.columns(2)
