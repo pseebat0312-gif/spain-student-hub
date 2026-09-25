@@ -20,4 +20,14 @@ if st.user.is_logged_in:
     st.divider()
     st.subheader("📂 我的专属空间")
     st.write(f"欢迎回来，{st.user.email}")
-    st.write("（未来这里会显示检测历史、个性化设置等）")
+
+    # === 会员状态区 ===
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("当前等级", "免费用户")
+    with col2:
+        st.metric("AI分析次数", "0 / 3")
+    
+    st.info("升级到会员，解锁无限次 AI 分析和历史记录保存功能。")
+    if st.button("升级到会员（即将开放）"):
+        st.warning("付费功能正在开发中，敬请期待。")
