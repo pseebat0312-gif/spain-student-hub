@@ -71,20 +71,17 @@ if st.user.is_logged_in:
                 with col1:
                     fav = "⭐" if record.get("is_favorite") else ""
                     st.write(f"{fav} **时间：** {record['created_at'][:19]} | **AI概率：** {record['ai_probability']:.2%}")
-                    st.caption(f"文本：{record['text_snippet']}...")
+                    with st.expander("📄 查看全文"):
+                        st.write(record['text_snippet'])
                 
                 with col2:
-                    # 直接从数据库记录里读当前状态
                     current_fav = record.get("is_favorite", False)
-                    
                     if st.button("⭐" if not current_fav else "✅", key=f"fav_{record_id}"):
                         supabase.table("detection_history")\
                             .update({"is_favorite": not current_fav})\
                             .eq("id", record_id)\
                             .execute()
                         st.rerun()
-                    
-                    # 用最明显的方式显示当前状态
                     if current_fav:
                         st.write("❤️ 已收藏")
                     else:
