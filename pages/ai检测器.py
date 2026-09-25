@@ -1,10 +1,16 @@
 import streamlit as st
+from supabase import create_client
+supabase=create_client(st.secrets["supabase"]["url"], st.secrets["supabase"]["key"])
+
+
+
 
 # 检查用户是否登录
 if not st.user.is_logged_in:
     st.warning("请先在首页登录，才能保存检测历史。")
     st.stop()  # 停止往下执行
-    
+
+
 import sys
 sys.path.append("..")
 from miexperiencia import check_my_experience
@@ -80,6 +86,14 @@ if st.button("检测", type="primary"):
         col1.metric("句子波动性 (Burstiness)", f"{burst:.3f}")
         col2.metric("词汇多样性 (Diversity)", f"{diver:.3f}")
         st.caption("提示：突发性越低、词汇越单调，越可能是 AI。人类写作通常有长短句交错和更丰富的用词。")
+
+        if st.user.is_logged_in:
+            supabase.table("detection_history").insert({
+                "user_email": st.user.email,
+                "text_snippet": text_input[:100],
+                "ai_probability": ai_prob
+            }).execute()
+            st.success("✅ 本次检测已保存")
 
 st.divider()
 st.caption("当前版本基于数学统计法，不依赖外部模型，秒级出结果。")
