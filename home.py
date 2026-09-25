@@ -74,19 +74,17 @@ if st.user.is_logged_in:
                     st.caption(f"文本：{record['text_snippet']}...")
                 
                 with col2:
-                    current_fav = st.session_state.fav_status.get(record_id, record.get("is_favorite"))
+                    # 直接从数据库记录里读当前状态
+                    current_fav = record.get("is_favorite", False)
                     
-                    if st.button("⭐" if not current_fav else "取消", key=f"fav_{record_id}"):
-                        new_status = not current_fav
+                    if st.button("⭐" if not current_fav else "✅", key=f"fav_{record_id}"):
                         supabase.table("detection_history")\
-                            .update({"is_favorite": new_status})\
+                            .update({"is_favorite": not current_fav})\
                             .eq("id", record_id)\
                             .execute()
-                        st.session_state.fav_status[record_id] = new_status
-                        st.success("已更新收藏")
                         st.rerun()
                     
-                    # 这里加一个显眼的文字，告诉你现在是收藏还是未收藏
+                    # 用最明显的方式显示当前状态
                     if current_fav:
                         st.write("❤️ 已收藏")
                     else:
