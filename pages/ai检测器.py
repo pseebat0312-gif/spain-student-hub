@@ -90,7 +90,7 @@ if st.button("检测", type="primary"):
         if st.user.is_logged_in:
             supabase.table("detection_history").insert({
                 "user_email": st.user.email,
-                "text_snippet": text_input
+                "text_snippet": text_input[:100],
                 "ai_probability": ai_prob
             }).execute()
             st.success("✅ 本次检测已保存")
