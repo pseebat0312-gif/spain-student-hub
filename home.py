@@ -77,6 +77,16 @@ if st.user.is_logged_in:
                 with col2:
                     current_fav = record.get("is_favorite", False)
                     st.write(f"当前状态：{current_fav}")
+                    if st.button("⭐", key=f"fav_{record_id}"):
+                        # 直接更新数据库
+                        supabase.table("detection_history")\
+                            .update({"is_favorite": True})\
+                            .eq("id", record_id)\
+                            .execute()
+                        
+                        # 不 rerun，而是立刻把当前状态设为 True
+                        st.write("✅ 已将收藏状态改为 True")
+                        st.write("请手动刷新页面查看结果")
                     if st.button("⭐" if not current_fav else "✅", key=f"fav_{record_id}"):
                         st.write(f"按钮被点击了")
                         result=supabase.table("detection_history")\
