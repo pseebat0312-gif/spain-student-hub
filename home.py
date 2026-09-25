@@ -37,6 +37,7 @@ if st.user.is_logged_in:
     st.divider()
     st.subheader("📂 我的专属空间")
     st.write(f"欢迎回来，{st.user.email}")
+    
     # 查看历史记录
     if st.button("📜 查看我的检测历史"):
         # 查询条件
@@ -45,45 +46,44 @@ if st.user.is_logged_in:
             .eq("user_email", st.user.email)\
             .order("created_at", desc=True)
 
-    # 只看收藏的开关
+        # 只看收藏的开关
         only_fav = st.checkbox("⭐ 只看收藏")
         if only_fav:
             query = query.eq("is_favorite", True)
 
-    # 执行查询
-    response = query.execute()
+        # 执行查询
+        response = query.execute()
 
-    if response.data:
-        st.write(f"共 {len(response.data)} 条记录：")
-        for record in response.data:
-            record_id = record["id"]
-            
-            col1, col2, col3 = st.columns([6, 1, 1])
-            with col1:
-                fav = "⭐" if record.get("is_favorite") else ""
-                st.write(f"{fav} **时间：** {record['created_at'][:19]} | **AI概率：** {record['ai_probability']:.2%}")
-                st.caption(f"文本：{record['text_snippet']}...")
-            
-            with col2:
-                if st.button("⭐" if not record.get("is_favorite") else "取消", key=f"fav_{record_id}"):
-                    supabase.table("detection_history")\
-                        .update({"is_favorite": not record.get("is_favorite")})\
-                        .eq("id", record_id)\
-                        .execute()
-                    st.rerun()
-            
-            with col3:
-                if st.button("🗑️", key=f"del_{record_id}"):
-                    supabase.table("detection_history")\
-                        .delete()\
-                        .eq("id", record_id)\
-                        .execute()
-                    st.rerun()
-            
-            st.divider()
-    else:
-        st.info("你还没有检测记录。")
-
+        if response.data:
+            st.write(f"共 {len(response.data)} 条记录：")
+            for record in response.data:
+                record_id = record["id"]
+                
+                col1, col2, col3 = st.columns([6, 1, 1])
+                with col1:
+                    fav = "⭐" if record.get("is_favorite") else ""
+                    st.write(f"{fav} **时间：** {record['created_at'][:19]} | **AI概率：** {record['ai_probability']:.2%}")
+                    st.caption(f"文本：{record['text_snippet']}...")
+                
+                with col2:
+                    if st.button("⭐" if not record.get("is_favorite") else "取消", key=f"fav_{record_id}"):
+                        supabase.table("detection_history")\
+                            .update({"is_favorite": not record.get("is_favorite")})\
+                            .eq("id", record_id)\
+                            .execute()
+                        st.rerun()
+                
+                with col3:
+                    if st.button("🗑️", key=f"del_{record_id}"):
+                        supabase.table("detection_history")\
+                            .delete()\
+                            .eq("id", record_id)\
+                            .execute()
+                        st.rerun()
+                
+                st.divider()
+        else:
+            st.info("你还没有检测记录。")
 # ===== 个人资料设置 =====
 st.divider()
 st.subheader("👤 个人资料设置")
