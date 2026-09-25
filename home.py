@@ -5,7 +5,7 @@ supabase = create_client(st.secrets["supabase"]["url"], st.secrets["supabase"]["
 
 if "fav_status" not in st.session_state:
     st.session_state.fav_status = {}
-    
+
 ADMIN_EMAIL = "pseebat0312@gmail.com"
 
 st.set_page_config(page_title="西班牙留学生工具站", page_icon="🇪🇸")
@@ -50,7 +50,12 @@ if st.user.is_logged_in:
             .order("created_at", desc=True)
 
         # 只看收藏的开关
-        only_fav = st.checkbox("⭐ 只看收藏")
+        if "only_fav" not in st.session_state:
+            st.session_state.only_fav = False
+
+        only_fav = st.checkbox("⭐ 只看收藏", value=st.session_state.only_fav, key="only_fav_checkbox")
+        st.session_state.only_fav = only_fav
+
         if only_fav:
             query = query.eq("is_favorite", True)
 
@@ -69,7 +74,6 @@ if st.user.is_logged_in:
                     st.caption(f"文本：{record['text_snippet']}...")
                 
                 with col2:
-                    # 先用 session_state 里最新的状态，没有就用数据库里的
                     current_fav = st.session_state.fav_status.get(record_id, record.get("is_favorite"))
                     
                     if st.button("⭐" if not current_fav else "取消", key=f"fav_{record_id}"):
@@ -78,10 +82,15 @@ if st.user.is_logged_in:
                             .update({"is_favorite": new_status})\
                             .eq("id", record_id)\
                             .execute()
-                        # 立刻更新本地状态，马上反映到页面上
                         st.session_state.fav_status[record_id] = new_status
                         st.success("已更新收藏")
                         st.rerun()
+                    
+                    # 这里加一个显眼的文字，告诉你现在是收藏还是未收藏
+                    if current_fav:
+                        st.write("❤️ 已收藏")
+                    else:
+                        st.write("🤍 未收藏")
             
                 with col3:
                     if st.button("🗑️", key=f"del_{record_id}"):
