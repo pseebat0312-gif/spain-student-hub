@@ -4,4 +4,5 @@ streamlit>=1.42.0
 transformers
 torch
 torchvision
+deep-translator
 
