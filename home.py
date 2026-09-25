@@ -17,12 +17,18 @@ with st.sidebar:
             st.login()
     else:
         profile = supabase.table("user_profiles")\
-                .select("nickname")\
+                .select("nickname", "avatar_emoji")\
                 .eq("email", st.user.email)\
                 .execute()
             
-        display_name = profile.data[0]["nickname"] if profile.data and profile.data[0].get("nickname") else st.user.name
-        st.success(f"👤 {display_name}")
+        if profile.data and profile.data[0]:
+                display_name = profile.data[0].get("nickname") or st.user.name
+                display_emoji = profile.data[0].get("avatar_emoji") or "👤"
+        else:
+                display_name = st.user.name
+                display_emoji = "👤"
+            
+        st.success(f"{display_emoji} {display_name}")
         if st.button("退出登录"):
             st.logout()
 
