@@ -74,14 +74,14 @@ if st.user.is_logged_in:
                     st.success("已更新收藏状态")
                     st.rerun()
             
-            with col3:
-                if st.button("🗑️", key=f"del_{record_id}"):
-                    supabase.table("detection_history")\
-                        .delete()\
-                        .eq("id", record_id)\
-                        .execute()
-                    st.success("已删除")
-                    st.rerun()
+                with col3:
+                    if st.button("🗑️", key=f"del_{record_id}"):
+                        supabase.table("detection_history")\
+                            .delete()\
+                            .eq("id", record_id)\
+                            .execute()
+                        st.success("已删除")
+                        st.rerun()
                 
                 st.divider()
         else:
