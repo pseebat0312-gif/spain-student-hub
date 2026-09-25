@@ -4,6 +4,7 @@ from deep_translator import GoogleTranslator
 st.set_page_config(page_title="简易翻译器", page_icon="🌐")
 st.title("🌐 简易翻译器")
 st.write("支持中文、英文、西班牙语互译。")
+st.write("我不想花钱买翻译模型所以现在这个用不了！")
 
 # 语言选择
 languages = {
