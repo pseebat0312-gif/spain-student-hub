@@ -66,20 +66,22 @@ if st.user.is_logged_in:
                     st.caption(f"文本：{record['text_snippet']}...")
                 
                 with col2:
-                    if st.button("⭐" if not record.get("is_favorite") else "取消", key=f"fav_{record_id}"):
-                        supabase.table("detection_history")\
-                            .update({"is_favorite": not record.get("is_favorite")})\
-                            .eq("id", record_id)\
-                            .execute()
-                        st.rerun()
-                
-                with col3:
-                    if st.button("🗑️", key=f"del_{record_id}"):
-                        supabase.table("detection_history")\
-                            .delete()\
-                            .eq("id", record_id)\
-                            .execute()
-                        st.rerun()
+                if st.button("⭐" if not record.get("is_favorite") else "取消", key=f"fav_{record_id}"):
+                    supabase.table("detection_history")\
+                        .update({"is_favorite": not record.get("is_favorite")})\
+                        .eq("id", record_id)\
+                        .execute()
+                    st.success("已更新收藏状态")
+                    st.rerun()
+            
+            with col3:
+                if st.button("🗑️", key=f"del_{record_id}"):
+                    supabase.table("detection_history")\
+                        .delete()\
+                        .eq("id", record_id)\
+                        .execute()
+                    st.success("已删除")
+                    st.rerun()
                 
                 st.divider()
         else:
