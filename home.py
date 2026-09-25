@@ -51,7 +51,7 @@ if st.user.is_logged_in:
             query = query.eq("is_favorite", True)
 
     # 执行查询
-        response = query.execute()
+    response = query.execute()
 
     if response.data:
         st.write(f"共 {len(response.data)} 条记录：")
