@@ -6,6 +6,14 @@ supabase = create_client(st.secrets["supabase"]["url"], st.secrets["supabase"]["
 if "fav_status" not in st.session_state:
     st.session_state.fav_status = {}
 
+@st.cache_data(ttl=5)
+def get_history(user_email):
+    return supabase.table("detection_history")\
+        .select("*")\
+        .eq("user_email", user_email)\
+        .order("created_at", desc=True)\
+        .execute().data
+
 ADMIN_EMAIL = "pseebat0312@gmail.com"
 
 st.set_page_config(page_title="西班牙留学生工具站", page_icon="🇪🇸")
@@ -77,14 +85,23 @@ if st.user.is_logged_in:
                 with col2:
                     current_fav = record.get("is_favorite", False)
                 
+                # 用 session_state 记录这个记录被点过收藏了
+                    if f"fav_toggle_{record_id}" not in st.session_state:
+                        st.session_state[f"fav_toggle_{record_id}"] = False
+                
                     if st.button("⭐" if not current_fav else "✅", key=f"fav_{record_id}"):
+                        new_status = not current_fav
                         supabase.table("detection_history")\
-                            .update({"is_favorite": not current_fav})\
+                            .update({"is_favorite": new_status})\
                             .eq("id", record_id)\
                             .execute()
+                    # 立刻在本地记录这个状态
+                        st.session_state[f"fav_toggle_{record_id}"] = True
+                        st.cache_data.clear()  # 清掉旧缓存
                         st.rerun()
                 
-                    if current_fav:
+                # 用本地状态直接显示，不依赖数据库同步
+                    if st.session_state[f"fav_toggle_{record_id}"] or current_fav:
                         st.write("❤️ 已收藏")
                     else:
                         st.write("🤍 未收藏")
