@@ -1,7 +1,11 @@
 import streamlit as st
+import datetime
+import calendar
+import pytz
 from supabase import create_client
-
+from streamlit_calendar import calendar
 from styles import apply_sidebar_style
+
 apply_sidebar_style()
 
 # ===== 页面配置 =====
@@ -18,7 +22,6 @@ supabase = get_supabase()
 
 ADMIN_EMAIL = "pseebat0312@gmail.com"
 
-
 # ===== 工具函数 =====
 def safe_execute(query, default=None):
     """统一包裹 Supabase 查询，出错不崩页面"""
@@ -27,7 +30,6 @@ def safe_execute(query, default=None):
     except Exception as e:
         st.error(f"数据库请求失败：{e}")
         return default if default is not None else []
-
 
 # ===== 侧边栏：登录区 =====
 with st.sidebar:
@@ -54,17 +56,14 @@ with st.sidebar:
         if st.button("退出登录"):
             st.logout()
 
-
 # ===== 未登录：到此为止 =====
 if not st.user.is_logged_in:
     st.stop()
-
 
 # ===== 已登录：专属空间 =====
 st.divider()
 st.subheader("📂 我的专属空间")
 st.write(f"欢迎回来，{st.user.email}")
-
 
 # ===== 1. 实时时钟 =====
 st.divider()
@@ -123,21 +122,19 @@ st.progress(progress)
 st.divider()
 st.subheader("📅 点击日期查看日程")
 
-# 拉取当前用户所有日程
-if st.user.is_logged_in:
-    schedules = supabase.table("schedules")\
-        .select("*")\
-        .eq("user_email", st.user.email)\
-        .execute()
-    events = []
-    for s in (schedules.data or []):
-        events.append({
-            "title": s["title"],
-            "start": f"{s['event_date']}T{s.get('event_time', '09:00')}:00",
-            "end": f"{s['event_date']}T{s.get('event_time', '10:00')}:00",
-        })
-else:
-    events = []
+schedules = safe_execute(
+    supabase.table("schedules")
+    .select("*")
+    .eq("user_email", st.user.email)
+)
+
+events = []
+for s in (schedules or []):
+    events.append({
+        "title": s["title"],
+        "start": f"{s['event_date']}T{s.get('event_time', '09:00')}:00",
+        "end": f"{s['event_date']}T{s.get('event_time', '10:00')}:00",
+    })
 
 calendar_options = {
     "initialView": "dayGridMonth",
@@ -155,7 +152,6 @@ cal_result = calendar(events=events, options=calendar_options, key="my_calendar"
 # 如果用户点了某天，就存起来
 if cal_result and cal_result.get("dateClick"):
     raw_date = cal_result["dateClick"]["date"][:10]
-    # 加 12 小时，避开时区陷阱
     parsed = datetime.datetime.strptime(raw_date, "%Y-%m-%d") + datetime.timedelta(hours=12)
     clicked_date = parsed.strftime("%Y-%m-%d")
     st.session_state["clicked_date"] = clicked_date
@@ -165,72 +161,68 @@ if "clicked_date" in st.session_state and st.session_state["clicked_date"]:
     clicked_date = st.session_state["clicked_date"]
     st.divider()
     st.subheader(f"📌 {clicked_date} 的日程")
-    
-    if st.user.is_logged_in:
-        day_schedules = supabase.table("schedules")\
-            .select("*")\
-            .eq("user_email", st.user.email)\
-            .eq("event_date", clicked_date)\
-            .order("event_time", desc=False)\
-            .execute()
-        
-        if day_schedules.data:
-            for s in day_schedules.data:
-                col1, col2 = st.columns([6, 1])
-                with col1:
-                    time_str = s.get("event_time", "全天")
-                    st.write(f"⏰ **{time_str}** — {s['title']}")
-                with col2:
-                    if st.button("🗑️", key=f"del_{s['id']}"):
-                        supabase.table("schedules")\
-                            .delete()\
-                            .eq("id", s["id"])\
-                            .execute()
-                        st.rerun()
-        else:
-            st.info("这一天还没有日程。")
-        
-        with st.expander("➕ 在这一天添加日程", expanded=False):
-            event_time = st.time_input("时间：", value=datetime.time(9, 0))
-            event_title = st.text_input("事项：", key=f"add_title_{clicked_date}")
-            if st.button("保存", key=f"add_btn_{clicked_date}"):
-                if event_title.strip():
-                    supabase.table("schedules").insert({
-                        "user_email": st.user.email,
-                        "event_date": clicked_date,
-                        "event_time": str(event_time),
-                        "title": event_title
-                    }).execute()
-                    st.success("✅ 已添加")
-                    st.rerun()
-    else:
-        st.info("登录后可以查看和添加日程。")
 
-# ===== 5. 我的所有日程列表 =====
-st.divider()
-st.subheader("📝 我所有的日程")
+    day_schedules = safe_execute(
+        supabase.table("schedules")
+        .select("*")
+        .eq("user_email", st.user.email)
+        .eq("event_date", clicked_date)
+        .order("event_time", desc=False)
+    )
 
-if st.user.is_logged_in:
-    all_schedules = supabase.table("schedules")\
-        .select("*")\
-        .eq("user_email", st.user.email)\
-        .order("event_date", desc=False)\
-        .execute()
-    
-    if all_schedules.data:
-        for s in all_schedules.data:
+    if day_schedules:
+        for s in day_schedules:
             col1, col2 = st.columns([6, 1])
             with col1:
                 time_str = s.get("event_time", "全天")
-                st.write(f"📌 **{s['event_date']} {time_str}**：{s['title']}")
+                st.write(f"⏰ **{time_str}** — {s['title']}")
             with col2:
-                if st.button("🗑️", key=f"del_all_{s['id']}"):
+                if st.button("🗑️", key=f"del_day_{s['id']}"):
                     supabase.table("schedules")\
                         .delete()\
                         .eq("id", s["id"])\
                         .execute()
                     st.rerun()
     else:
-        st.info("你还没有添加日程。")
+        st.info("这一天还没有日程。")
+
+    with st.expander("➕ 在这一天添加日程", expanded=False):
+        event_time = st.time_input("时间：", value=datetime.time(9, 0), key=f"time_{clicked_date}")
+        event_title = st.text_input("事项：", key=f"title_{clicked_date}")
+        if st.button("保存", key=f"save_{clicked_date}"):
+            if event_title.strip():
+                supabase.table("schedules").insert({
+                    "user_email": st.user.email,
+                    "event_date": clicked_date,
+                    "event_time": str(event_time),
+                    "title": event_title
+                }).execute()
+                st.success("✅ 已添加")
+                st.rerun()
+
+# ===== 5. 我的所有日程列表 =====
+st.divider()
+st.subheader("📝 我所有的日程")
+
+all_schedules = safe_execute(
+    supabase.table("schedules")
+    .select("*")
+    .eq("user_email", st.user.email)
+    .order("event_date", desc=False)
+)
+
+if all_schedules:
+    for s in all_schedules:
+        col1, col2 = st.columns([6, 1])
+        with col1:
+            time_str = s.get("event_time", "全天")
+            st.write(f"📌 **{s['event_date']} {time_str}**：{s['title']}")
+        with col2:
+            if st.button("🗑️", key=f"del_all_{s['id']}"):
+                supabase.table("schedules")\
+                    .delete()\
+                    .eq("id", s["id"])\
+                    .execute()
+                st.rerun()
 else:
-    st.info("登录后可以添加你的个人日程。")
+    st.info("你还没有添加日程。")
