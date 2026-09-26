@@ -194,9 +194,6 @@ calendar_options = {
 
 cal_result = calendar(events=events, options=calendar_options, key="my_calendar")
 
-# ===== 未登录：到此为止 =====
-if not st.user.is_logged_in:
-    st.stop()
 
 
 # 如果用户点了某天，就存起来
@@ -207,6 +204,10 @@ if cal_result and cal_result.get("dateClick"):
     st.session_state["clicked_date"] = clicked_date
 
 
+# ===== 未登录：到此为止 =====
+if not st.user.is_logged_in:
+    st.stop()
+    
 # ===== 4. 当天详情 =====
 if "clicked_date" in st.session_state and st.session_state["clicked_date"]:
     clicked_date = st.session_state["clicked_date"]
