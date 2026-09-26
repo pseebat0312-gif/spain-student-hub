@@ -56,14 +56,15 @@ with st.sidebar:
         if st.button("退出登录"):
             st.logout()
 
-# ===== 未登录：到此为止 =====
-if not st.user.is_logged_in:
-    st.stop()
+
 
 # ===== 已登录：专属空间 =====
 st.divider()
 st.subheader("📂 我的专属空间")
-st.write(f"欢迎回来，{st.user.email}")
+if st.user.is_logged_in:
+    st.write(f"欢迎回来，{st.user.email}")
+else:
+    st.info("🔒 登录后可以管理你的专属空间")
 
 # ===== 1. 实时时钟 =====
 st.divider()
@@ -157,6 +158,12 @@ if cal_result and cal_result.get("dateClick"):
     clicked_date = parsed.strftime("%Y-%m-%d")
     st.session_state["clicked_date"] = clicked_date
 
+
+# ===== 未登录：到此为止 =====
+if not st.user.is_logged_in:
+    st.stop()
+
+    
 # ===== 4. 当天日程详情 =====
 if "clicked_date" in st.session_state and st.session_state["clicked_date"]:
     clicked_date = st.session_state["clicked_date"]
