@@ -36,7 +36,7 @@ with st.expander("🟡 B1-B2 进阶（看懂新闻 / 写简单文章）", expand
     st.markdown("**📖 免费学习网站**")
     col1, col2 = st.columns(2)
     with col1:
-        st.link_button("RTVE 新闻",.link_button("塞 "https://www.rtve.es/", use_container_width=True)
+        st.link_button("RTVE 新闻","https://www.rtve.es/", use_container_width=True)
     with col2:
         st.link_button("El País 简易版", "https://elpais.com/", use_container_width=True)
     
