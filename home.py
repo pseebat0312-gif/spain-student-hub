@@ -134,11 +134,47 @@ else:
 
 
 events = []
+
+# 加上用户的日程（如果登录了）
 for s in (schedules or []):
     events.append({
         "title": s["title"],
         "start": f"{s['event_date']}T{s.get('event_time', '09:00')}:00",
         "end": f"{s['event_date']}T{s.get('event_time', '10:00')}:00",
+        "color": "#4a7c59"
+    })
+
+# 加上中西节日
+festivals = [
+    # 中国节日
+    (f"{today.year}-01-01", "🎉 元旦 / Año Nuevo"),
+    (f"{today.year}-01-29", "🧧 春节 / Año Nuevo Chino"),
+    (f"{today.year}-04-04", "🌿 清明节 / Qingming"),
+    (f"{today.year}-05-01", "💼 劳动节 / Día del Trabajo"),
+    (f"{today.year}-06-10", "🐉 端午节 / Festival del Barco Dragón"),
+    (f"{today.year}-09-17", "🌕 中秋节 / Festival del Medio Otoño"),
+    (f"{today.year}-10-01", "🇨🇳 中国国庆 / Día Nacional de China"),
+    # 西班牙节日
+    (f"{today.year}-01-06", "👑 三王节 / Día de Reyes"),
+    (f"{today.year}-03-19", "👨 父亲节 / Día del Padre"),
+    (f"{today.year}-04-18", "✝️ 圣周 / Semana Santa"),
+    (f"{today.year}-05-04", "👩 母亲节 / Día de la Madre"),
+    (f"{today.year}-06-24", "🔥 圣胡安节 / Noche de San Juan"),
+    (f"{today.year}-08-15", "⛪ 圣母升天节 / Asunción de la Virgen"),
+    (f"{today.year}-10-12", "🇪🇸 西班牙国庆 / Fiesta Nacional de España"),
+    (f"{today.year}-11-01", "👻 万圣节 / Día de Todos los Santos"),
+    (f"{today.year}-12-06", "📜 宪法日 / Día de la Constitución"),
+    (f"{today.year}-12-08", "⛪ 圣母无染原罪节 / Inmaculada Concepción"),
+    (f"{today.year}-12-25", "🎄 圣诞节 / Navidad"),
+]
+
+for date_str, title in festivals:
+    events.append({
+        "title": title,
+        "start": f"{date_str}T00:00:00",
+        "end": f"{date_str}T23:59:59",
+        "color": "#f5e6a3",
+        "allDay": True
     })
 
 calendar_options = {
