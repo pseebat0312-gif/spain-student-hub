@@ -152,7 +152,8 @@ cal_result = st_calendar(events=events, options=calendar_options, key="my_calend
 # 如果用户点了某天，就存起来
 if cal_result and cal_result.get("dateClick"):
     raw_date = cal_result["dateClick"]["date"][:10]
-    parsed = datetime.datetime.strptime(raw_date, "%Y-%m-%d") + datetime.timedelta(hours=12)
+    # 直接加一整天
+    parsed = datetime.datetime.strptime(raw_date, "%Y-%m-%d") + datetime.timedelta(days=1)
     clicked_date = parsed.strftime("%Y-%m-%d")
     st.session_state["clicked_date"] = clicked_date
 
