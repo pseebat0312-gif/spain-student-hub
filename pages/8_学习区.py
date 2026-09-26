@@ -82,7 +82,7 @@ with st.expander("🎯 DELE / SIELE 考试专项", expanded=False):
     st.markdown("**📝 备考资料**")
     col3, col4 = st.columns(2)
     with col3:
-        st万提斯学院", "https://www.cervantes.es/", use_container_width=True)
+        st.link_button("塞万提斯学院", "https://www.cervantes.es/", use_container_width=True)
     with col4:
         st.link_button("DELE 模拟题", "https://examenes.cervantes.es/es/dele/preparar-prueba", use_container_width=True)
 
