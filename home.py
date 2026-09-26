@@ -123,11 +123,15 @@ st.progress(progress)
 st.divider()
 st.subheader("📅 点击日期查看日程")
 
-schedules = safe_execute(
-    supabase.table("schedules")
-    .select("*")
-    .eq("user_email", st.user.email)
-)
+if st.user.is_logged_in:
+    schedules = safe_execute(
+        supabase.table("schedules")
+        .select("*")
+        .eq("user_email", st.user.email)
+    )
+else:
+    schedules = []
+
 
 events = []
 for s in (schedules or []):
