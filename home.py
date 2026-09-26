@@ -1,3 +1,23 @@
+st.markdown("""
+<style>
+    [data-testid="stSidebar"] {
+        background-color: #1a1a2e;
+        color: white;
+    }
+    [data-testid="stSidebar"] a {
+        color: #ffd700;
+        font-weight: bold;
+        border-radius: 8px;
+        padding: 5px 10px;
+    }
+    [data-testid="stSidebar"] a:hover {
+        background-color: #ffd700;
+        color: #1a1a2e;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+
 import streamlit as st
 from supabase import create_client
 
