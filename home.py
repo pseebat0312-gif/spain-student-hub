@@ -70,81 +70,152 @@ import calendar
 import pytz
 
 # ===== 顶部时钟 =====
+import datetime
+import calendar
+import pytz
+
+# ===== 顶部时钟（实时跳动） =====
 st.divider()
 st.subheader("🕐 现在时间")
 
-spain_tz = pytz.timezone("Europe/Madrid")
-china_tz = pytz.timezone("Asia/Shanghai")
+clock_html = """
+<div style="display:flex; gap:20px; flex-wrap:wrap;">
+  <div style="flex:1; background:#1a1a2e; padding:15px; border-radius:12px; border:2px solid #4a7c59; text-align:center; color:white;">
+    <div style="font-size:16px; color:#a0d8b3;">🇪🇸 西班牙时间</div>
+    <div id="spain-clock" style="font-size:22px; font-weight:bold; margin-top:8px;">--:--:--</div>
+  </div>
+  <div style="flex:1; background:#1a1a2e; padding:15px; border-radius:12px; border:2px solid #4a7c59; text-align:center; color:white;">
+    <div style="font-size:16px; color:#a0d8b3;">🇨🇳 中国时间</div>
+    <div id="china-clock" style="font-size:22px; font-weight:bold; margin-top:8px;">--:--:--</div>
+  </div>
+</div>
+<script>
+function updateClocks() {
+  const now = new Date();
+  const spain = new Date(now.toLocaleString("en-US", {timeZone: "Europe/Madrid"}));
+  const china = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Shanghai"}));
+  
+  const pad = (n) => String(n).padStart(2, '0');
+  const fmt = (d) => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  
+  document.getElementById('spain-clock').innerText = fmt(spain);
+  document.getElementById('china-clock').innerText = fmt(china);
+}
+setInterval(updateClocks, 1000);
+updateClocks();
+</script>
+"""
+st.components.v1.html(clock_html, height=130)
 
-now = datetime.datetime.now()
-spain_time = now.astimezone(spain_tz)
-china_time = now.astimezone(china_tz)
-
-col1, col2 = st.columns(2)
-with col1:
-    st.metric("🇪🇸 西班牙时间", spain_time.strftime("%Y-%m-%d %H:%M:%S"))
-with col2:
-    st.metric("🇨🇳 中国时间", china_time.strftime("%Y-%m-%d %H:%M:%S"))
 
 # ===== 会动的日历 =====
 st.divider()
 st.subheader("📅 中西文化日历")
 
-today = spain_time.date()
+spain_tz = pytz.timezone("Europe/Madrid")
+today = datetime.datetime.now(spain_tz).date()
 year = today.year
 month = today.month
 
 # 节日数据
 festivals = {
     (1, 1): "🎉 元旦",
-    (1, 6): "👑 三王节（西班牙）",
-    (1, 29): "🧧 春节（中国）",
+    (1, 6): "👑 三王节",
+    (1, 29): "🧧 春节",
     (2, 14): "💘 情人节",
     (3, 8): "👩 妇女节",
-    (3, 19): "👨 父亲节（西班牙）",
-    (4, 23): "📚 世界读书日",
+    (3, 19): "👨 父亲节",
+    (4, 23): "📚 读书日",
     (5, 1): "💼 劳动节",
     (6, 24): "🔥 圣胡安节",
     (8, 15): "⛪ 圣母升天节",
-    (9, 11): "🏴 加泰罗尼亚日",
+    (9, 11): "🏴 加泰日",
     (10, 1): "🇨🇳 中国国庆",
     (10, 12): "🇪🇸 西班牙国庆",
     (11, 1): "👻 万圣节",
     (12, 6): "📜 宪法日",
-    (12, 8): "⛪ 圣母无染原罪节",
+    (12, 8): "⛪ 圣母节",
     (12, 25): "🎄 圣诞节",
 }
 
-# 生成日历
 cal = calendar.monthcalendar(year, month)
 weekdays = ["一", "二", "三", "四", "五", "六", "日"]
 
-html = '<table style="width:100%; text-align:center; border-collapse:collapse;">'
+# 用 CSS 强制每列等宽
+html = """
+<style>
+    .calendar-table {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: separate;
+        border-spacing: 6px;
+    }
+    .calendar-table th {
+        padding: 10px;
+        color: #4a7c59;
+        font-weight: bold;
+        font-size: 15px;
+        text-align: center;
+    }
+    .calendar-table td {
+        padding: 10px 5px;
+        text-align: center;
+        border-radius: 10px;
+        height: 80px;
+        vertical-align: top;
+        font-size: 14px;
+    }
+    .today-cell {
+        background: #4a7c59;
+        color: white !important;
+        box-shadow: 0 0 12px #4a7c59;
+    }
+    .normal-cell {
+        background: #2a2a40;
+        color: #ddd;
+    }
+    .festival-text {
+        font-size: 10px;
+        margin-top: 4px;
+        color: #a0d8b3;
+    }
+    .today-cell .festival-text {
+        color: #fff;
+    }
+    .day-icon {
+        font-size: 18px;
+        display: block;
+    }
+</style>
+<table class="calendar-table">
+"""
+
 html += "<tr>"
 for wd in weekdays:
-    html += f'<th style="padding:8px; color:#4a7c59; font-weight:bold;">{wd}</th>'
+    html += f"<th>{wd}</th>"
 html += "</tr>"
 
 for week in cal:
     html += "<tr>"
     for day in week:
         if day == 0:
-            html += '<td style="padding:8px;"></td>'
+            html += "<td></td>"
         else:
             is_today = (day == today.day)
             festival = festivals.get((month, day), "")
-            bg = "#4a7c59" if is_today else "#f0f0f0"
-            color = "white" if is_today else "#333"
+            cls = "today-cell" if is_today else "normal-cell"
             icon = "🧍" if is_today else ""
-            html += f'<td style="padding:8px; background:{bg}; color:{color}; border-radius:8px; margin:2px;">'
-            html += f'<div style="font-size:14px;">{day} {icon}</div>'
+            html += f'<td class="{cls}">'
+            html += f'<span class="day-icon">{icon}</span>'
+            html += f'<div style="font-weight:bold;">{day}</div>'
             if festival:
-                html += f'<div style="font-size:10px;">{festival}</div>'
+                html += f'<div class="festival-text">{festival}</div>'
             html += "</td>"
     html += "</tr>"
 
 html += "</table>"
 st.markdown(html, unsafe_allow_html=True)
+
 
 # ===== 用户日程 =====
 st.divider()
@@ -170,7 +241,6 @@ if st.user.is_logged_in:
             else:
                 st.warning("请输入事项内容。")
     
-    # 显示日程列表
     schedules = supabase.table("schedules")\
         .select("*")\
         .eq("user_email", st.user.email)\
@@ -193,8 +263,6 @@ if st.user.is_logged_in:
         st.info("你还没有添加日程。")
 else:
     st.info("登录后可以添加你的个人日程。")
-
-
 
 
 # ---------- 个人资料 ----------
