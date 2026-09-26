@@ -12,7 +12,7 @@ with col1:
 with col2:
     st.link_button("Campus Virtual", "https://www.ucm.es/campusvirtual", use_container_width=True)
 with col3:
-    st.link_button("学生邮箱", "https://www.ucm.es/correo", use_container_width=True)
+    st.link_button("学生邮箱", "https://mail.google.com/", use_container_width=True)
 with col4:
     st.link_button("学校提供的免费工具", "https://ssii.ucm.es/", use_container_width=True)
 
