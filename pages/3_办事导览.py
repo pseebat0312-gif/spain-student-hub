@@ -107,6 +107,7 @@ elif school == "办理返乡证":
     st.subheader("🔗 官方预约与表格下载")
     col1, col2 = st.columns(2)
     with col1:
+        st.markdown("（如果进不去请直接搜索Sede policia autorizazion de regreso）")
         st.link_button("预约返乡证（ICPP）", "https://sede.administracionespublicas.gob.es/icpplus/", use_container_width=True)
     with col2:
         st.link_button("EX-13 表格下载", "https://extranjeros.inclusion.gob.es/", use_container_width=True)
