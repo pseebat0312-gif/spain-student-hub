@@ -1,19 +1,19 @@
 st.markdown("""
 <style>
     [data-testid="stSidebar"] {
-        background-color: #1a1a2e;
-        color: white;
+        background-color: #1a1a2e !important;
     }
     [data-testid="stSidebar"] a {
-        color: #ffd700;
-        font-weight: bold;
-        border-radius: 8px;
-        padding: 5px 10px;
+        color: #ffd700 !important;
+        font-weight: bold !important;
     }
     [data-testid="stSidebar"] a:hover {
-        background-color: #ffd700;
-        color: #1a1a2e;
+        background-color: #ffd700 !important;
+        color: #1a1a2e !important;
     }
+</style>
+""", unsafe_allow_html=True)
+
 </style>
 """, unsafe_allow_html=True)
 
