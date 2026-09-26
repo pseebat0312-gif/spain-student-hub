@@ -1,3 +1,6 @@
+import streamlit as st
+from supabase import create_client
+
 st.markdown("""
 <style>
     [data-testid="stSidebar"] {
@@ -13,13 +16,6 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
-
-</style>
-""", unsafe_allow_html=True)
-
-
-import streamlit as st
-from supabase import create_client
 
 # ===== 页面配置 =====
 st.set_page_config(page_title="西班牙留学生工具站", page_icon="🇪🇸")
