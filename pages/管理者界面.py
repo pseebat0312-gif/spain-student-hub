@@ -48,3 +48,45 @@ if st.button("📋 查看全部用户记录"):
                     st.divider()
     else:
         st.info("暂无记录。")
+
+st.divider()
+st.subheader("✍️ 留言管理")
+
+all_msgs = supabase.table("messages")\
+    .select("*")\
+    .order("created_at", desc=True)\
+    .execute()
+
+if all_msgs.data:
+    st.write(f"共 {len(all_msgs.data)} 条留言：")
+    for msg in all_msgs.data:
+        col1, col2, col3 = st.columns([6, 1, 1])
+        with col1:
+            status = "🌍 已公开" if msg.get("is_public") else "🔒 私密"
+            st.write(f"**{msg['created_at'][:19]}** | {msg['user_email']} | {status}")
+            st.write(msg["content"])
+            reply_text = st.text_area("回复这条留言：", value=msg.get("reply", ""), key=f"reply_{msg['id']}")
+            if st.button("💾 保存回复", key=f"save_reply_{msg['id']}"):
+                supabase.table("messages")\
+                    .update({"reply": reply_text})\
+                    .eq("id", msg["id"])\
+                    .execute()
+                st.success("回复已保存")
+                st.rerun()
+        with col2:
+            if st.button("✅ 公开" if not msg.get("is_public") else "🔒 取消", key=f"pub_{msg['id']}"):
+                supabase.table("messages")\
+                    .update({"is_public": not msg.get("is_public")})\
+                    .eq("id", msg["id"])\
+                    .execute()
+                st.rerun()
+        with col3:
+            if st.button("🗑️ 删除", key=f"del_msg_{msg['id']}"):
+                supabase.table("messages")\
+                    .delete()\
+                    .eq("id", msg["id"])\
+                    .execute()
+                st.rerun()
+        st.divider()
+else:
+    st.info("暂无留言。")
