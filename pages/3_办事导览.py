@@ -62,7 +62,7 @@ if school == "续居留":
         """)
     
     st.subheader("🔗 申请通过后官方链接")
-    col1= st.columns(1)
+    col1, = st.columns(1)
     with col1:
         st.link_button("警察局预约系统", "https://sede.administracionespublicas.gob.es/", use_container_width=True)
     
