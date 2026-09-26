@@ -6,6 +6,7 @@ from styles import apply_sidebar_style
 apply_sidebar_style()
 st.set_page_config(page_title="二手市场", page_icon="🛒")
 st.title("🛒 留学生二手市场")
+st.write("此平台仅作为沟通媒介，不涉及交易，请通过买家提供的联系方式进行后续交易。")
 
 supabase = create_client(st.secrets["supabase"]["url"], st.secrets["supabase"]["key"])
 
