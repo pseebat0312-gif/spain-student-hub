@@ -50,9 +50,9 @@ else:
         reverse=True
     )
 
-if posts.data:
-    for post in posts.data:
-        with st.expander(f"📌 [{post['category']}] {post['title']}（{post['created_at'][:10]}）", expanded=False):
+if posts_data:
+    for post in posts_data:
+        with st.expander(f"📌 [{post['category']}] {post['title']}({post['created_at'][:10]})", expanded=False):
             st.write(post["content"])
             st.caption(f"发布者：{post['user_email']}")
             
