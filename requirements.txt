@@ -5,4 +5,5 @@ transformers
 torch
 torchvision
 deep-translator
+pytz
 
