@@ -75,14 +75,6 @@ if posts.data:
             
             # 发回复
             reply_text = st.text_input("回复内容：", key=f"reply_text_{post['id']}")
-            if st.button("发送回复", key=f"send_reply_{post['id']}"):
-                if reply_text.strip():
-                    supabase.table("replies").insert({
-                        "post_id": post["id"],
-                        "user_email": st.user.email,
-                        "content": reply_text
-                    }).execute()
-                    st.rerun()
             if st.button("发送回复", key=f"send_reply_{post['id']}_{len(replies.data)}"):
                 if reply_text.strip():
                     supabase.table("replies").insert({
