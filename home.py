@@ -65,16 +65,63 @@ st.divider()
 st.subheader("📂 我的专属空间")
 st.write(f"欢迎回来，{st.user.email}")
 
-from streamlit_calendar import calendar
-import datetime
-import pytz
 
-# ===== 可点击的日历 =====
+# ===== 1. 实时时钟 =====
+st.divider()
+st.subheader("🕐 现在时间")
+
+clock_html = """
+<div style="display:flex; gap:20px; flex-wrap:wrap;">
+  <div style="flex:1; background:#1a1a2e; padding:15px; border-radius:12px; border:2px solid #4a7c59; text-align:center; color:white;">
+    <div style="font-size:16px; color:#a0d8b3;">🇪🇸 西班牙时间</div>
+    <div id="spain-clock" style="font-size:22px; font-weight:bold; margin-top:8px;">--:--:--</div>
+  </div>
+  <div style="flex:1; background:#1a1a2e; padding:15px; border-radius:12px; border:2px solid #4a7c59; text-align:center; color:white;">
+    <div style="font-size:16px; color:#a0d8b3;">🇨🇳 中国时间</div>
+    <div id="china-clock" style="font-size:22px; font-weight:bold; margin-top:8px;">--:--:--</div>
+  </div>
+</div>
+<script>
+function updateClocks() {
+  const now = new Date();
+  const spain = new Date(now.toLocaleString("en-US", {timeZone: "Europe/Madrid"}));
+  const china = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Shanghai"}));
+  const pad = (n) => String(n).padStart(2, '0');
+  const fmt = (d) => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  document.getElementById('spain-clock').innerText = fmt(spain);
+  document.getElementById('china-clock').innerText = fmt(china);
+}
+setInterval(updateClocks, 1000);
+updateClocks();
+</script>
+"""
+st.components.v1.html(clock_html, height=130)
+
+# ===== 2. 今年进度条 =====
+spain_tz = pytz.timezone("Europe/Madrid")
+now = datetime.datetime.now(spain_tz)
+today = now.date()
+year = today.year
+
+days_in_year = 366 if calendar.isleap(year) else 365
+day_of_year = today.timetuple().tm_yday
+days_left = days_in_year - day_of_year
+progress = day_of_year / days_in_year
+
+st.divider()
+st.subheader("📊 今年进度")
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.metric("今天是", f"{today.month}月{today.day}日")
+with col2:
+    st.metric("今年已过", f"{day_of_year} 天")
+with col3:
+    st.metric("今年还剩", f"{days_left} 天")
+st.progress(progress)
+
+# ===== 3. 可点击的日历 =====
 st.divider()
 st.subheader("📅 点击日期查看日程")
-
-spain_tz = pytz.timezone("Europe/Madrid")
-today = datetime.datetime.now(spain_tz).date()
 
 # 拉取当前用户所有日程
 if st.user.is_logged_in:
@@ -82,8 +129,6 @@ if st.user.is_logged_in:
         .select("*")\
         .eq("user_email", st.user.email)\
         .execute()
-    
-    # 把日程转成 calendar 组件需要的格式
     events = []
     for s in (schedules.data or []):
         events.append({
@@ -94,7 +139,6 @@ if st.user.is_logged_in:
 else:
     events = []
 
-# 显示日历
 calendar_options = {
     "initialView": "dayGridMonth",
     "locale": "zh-cn",
@@ -106,18 +150,17 @@ calendar_options = {
     },
 }
 
-cal_result = calendar(
-    events=events,
-    options=calendar_options,
-    key="my_calendar"
-)
+cal_result = calendar(events=events, options=calendar_options, key="my_calendar")
 
-# 如果用户点了某天，就把那天存起来
+# 如果用户点了某天，就存起来
 if cal_result and cal_result.get("dateClick"):
-    clicked_date = cal_result["dateClick"]["date"][:10]  # 取 YYYY-MM-DD
+    raw_date = cal_result["dateClick"]["date"][:10]
+    # 加 12 小时，避开时区陷阱
+    parsed = datetime.datetime.strptime(raw_date, "%Y-%m-%d") + datetime.timedelta(hours=12)
+    clicked_date = parsed.strftime("%Y-%m-%d")
     st.session_state["clicked_date"] = clicked_date
 
-# ===== 弹出当天日程 =====
+# ===== 4. 当天日程详情 =====
 if "clicked_date" in st.session_state and st.session_state["clicked_date"]:
     clicked_date = st.session_state["clicked_date"]
     st.divider()
@@ -147,11 +190,9 @@ if "clicked_date" in st.session_state and st.session_state["clicked_date"]:
         else:
             st.info("这一天还没有日程。")
         
-        # 快速在这一天添加日程
         with st.expander("➕ 在这一天添加日程", expanded=False):
             event_time = st.time_input("时间：", value=datetime.time(9, 0))
             event_title = st.text_input("事项：", key=f"add_title_{clicked_date}")
-            
             if st.button("保存", key=f"add_btn_{clicked_date}"):
                 if event_title.strip():
                     supabase.table("schedules").insert({
@@ -164,3 +205,32 @@ if "clicked_date" in st.session_state and st.session_state["clicked_date"]:
                     st.rerun()
     else:
         st.info("登录后可以查看和添加日程。")
+
+# ===== 5. 我的所有日程列表 =====
+st.divider()
+st.subheader("📝 我所有的日程")
+
+if st.user.is_logged_in:
+    all_schedules = supabase.table("schedules")\
+        .select("*")\
+        .eq("user_email", st.user.email)\
+        .order("event_date", desc=False)\
+        .execute()
+    
+    if all_schedules.data:
+        for s in all_schedules.data:
+            col1, col2 = st.columns([6, 1])
+            with col1:
+                time_str = s.get("event_time", "全天")
+                st.write(f"📌 **{s['event_date']} {time_str}**：{s['title']}")
+            with col2:
+                if st.button("🗑️", key=f"del_all_{s['id']}"):
+                    supabase.table("schedules")\
+                        .delete()\
+                        .eq("id", s["id"])\
+                        .execute()
+                    st.rerun()
+    else:
+        st.info("你还没有添加日程。")
+else:
+    st.info("登录后可以添加你的个人日程。")
