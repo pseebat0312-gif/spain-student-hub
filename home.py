@@ -192,7 +192,7 @@ calendar_options = {
     "dayMaxEvents": 2,
 }
 
-cal_result = calendar(events=events, options=calendar_options, key="my_calendar")
+cal_result = st_calendar(events=events, options=calendar_options, key="my_calendar")
 
 
 
@@ -207,7 +207,7 @@ if cal_result and cal_result.get("dateClick"):
 # ===== 未登录：到此为止 =====
 if not st.user.is_logged_in:
     st.stop()
-    
+
 # ===== 4. 当天详情 =====
 if "clicked_date" in st.session_state and st.session_state["clicked_date"]:
     clicked_date = st.session_state["clicked_date"]
