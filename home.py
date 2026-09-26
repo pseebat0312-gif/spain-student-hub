@@ -3,16 +3,31 @@ from supabase import create_client
 
 st.markdown("""
 <style>
+    /* 侧边栏背景色和边框 */
     [data-testid="stSidebar"] {
         background-color: #1a1a2e !important;
+        border-right: 3px solid #e6c35c !important;
     }
+    
+    /* 侧边栏链接：字体更大、颜色更亮、有圆角边框 */
     [data-testid="stSidebar"] a {
-        color: #ffd700 !important;
+        color: #f5e6a3 !important;
         font-weight: bold !important;
+        font-size: 18px !important;
+        border: 1px solid #f5e6a3 !important;
+        border-radius: 10px !important;
+        padding: 8px 12px !important;
+        margin-bottom: 5px !important;
+        display: block !important;
+        text-decoration: none !important;
+        transition: all 0.3s ease !important;
     }
+    
+    /* 鼠标悬停时：背景变浅金，文字变深 */
     [data-testid="stSidebar"] a:hover {
-        background-color: #ffd700 !important;
+        background-color: #f5e6a3 !important;
         color: #1a1a2e !important;
+        transform: translateX(5px) !important;
     }
 </style>
 """, unsafe_allow_html=True)
