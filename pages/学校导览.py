@@ -6,9 +6,11 @@ st.write("请选择你的学校，查看对应的官方入口。")
 
 school=st.selectbox(
     "选择你的学校：",
-    ["UCM","UAM","UB","其他（即将添加）"]
+    ["请选择学校","UCM","UAM","UB","其他（即将添加）"]
 )
 st.divider()
+if school=="请选择学校":
+    st.info("👆 请从上方下拉菜单中选择你的学校。")
 if school =="UCM":
     st.subheader("📚 学术与教学")
     col1, col2, col3, col4= st.columns(4)
@@ -35,13 +37,13 @@ if school =="UCM":
     st.divider()
     st.info("💡 提示：在校外访问 Campus Virtual 时，需要先连接学校的 VPN。")
 
-elif school == "马德里自治大学 (UAM)":
+elif school == "UAM":
     st.info("UAM 的入口正在整理中，敬请期待！")
 
-elif school == "巴塞罗那大学 (UB)":
+elif school == "UB":
     st.info("UB 的入口正在整理中，敬请期待！")
 
-elif school == "庞培法布拉大学 (UPF)":
+elif school == "UPF":
     st.info("UPF 的入口正在整理中，敬请期待！")
 
 else:
