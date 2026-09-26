@@ -26,5 +26,23 @@ def apply_sidebar_style():
             color: #ffffff !important;
             transform: translateX(5px) !important;
         }
+        
+    /* 侧边栏“个人中心”链接：整框抹茶绿 */
+    [data-testid="stSidebar"] [data-testid="stPageLink"] {
+        background-color: #4a7c59 !important;
+        border-radius: 10px !important;
+        padding: 8px 12px !important;
+        border: none !important;
+    }
+    
+    [data-testid="stSidebar"] [data-testid="stPageLink"] a {
+        color: #ffffff !important;
+        font-weight: bold !important;
+        text-decoration: none !important;
+    }
+    
+    [data-testid="stSidebar"] [data-testid="stPageLink"]:hover {
+        background-color: #6b9e7a !important;
+    }
     </style>
     """, unsafe_allow_html=True)
