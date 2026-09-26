@@ -38,7 +38,19 @@ with st.expander("➕ 发布新帖子", expanded=False):
 st.divider()
 
 # ===== 帖子列表 =====
-posts = supabase.table("posts").select("*").order("created_at", desc=True).execute()
+sort_by = st.selectbox("排序方式：", ["最新发布", "最多回复"])
+
+if sort_by == "最新发布":
+    posts = supabase.table("posts").select("*").order("created_at", desc=True).execute()
+else:
+    # 先拿到所有帖子
+    all_posts = supabase.table("posts").select("*").execute().data
+    # 算每个帖子的回复数
+    posts = {"data": sorted(
+        all_posts,
+        key=lambda p: len(supabase.table("replies").select("*").eq("post_id", p["id"]).execute().data),
+        reverse=True
+    )}
 
 if posts.data:
     for post in posts.data:
@@ -62,7 +74,19 @@ if posts.data:
                 st.caption("还没有回复，来抢沙发吧！")
             
             # 发回复
-            reply_text = st.text_input("回复：", key=f"reply_{post['id']}")
+            reply_to = st.text_input("回复给谁（可选）：", key=f"reply_to_{post['id']}")
+            reply_text = st.text_input("回复内容：", key=f"reply_{post['id']}")
+
+            if st.button("发送回复", key=f"send_reply_{post['id']}"):
+                if reply_text.strip():
+                    content = f"@{reply_to} {reply_text}" if reply_to.strip() else reply_text
+                    supabase.table("replies").insert({
+                        "post_id": post["id"],
+                        "user_email": st.user.email,
+                        "content": content
+                     }).execute()
+                    st.rerun()
+
             if st.button("发送回复", key=f"send_reply_{post['id']}"):
                 if reply_text.strip():
                     supabase.table("replies").insert({
