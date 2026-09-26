@@ -1,6 +1,9 @@
 import streamlit as st
 from supabase import create_client
-
+import sys
+sys.path.append("..")
+from styles import apply_sidebar_style
+apply_sidebar_style()
 st.set_page_config(page_title="二手市场", page_icon="🛒")
 st.title("🛒 留学生二手市场")
 

@@ -1,4 +1,8 @@
 import streamlit as st
+import sys
+sys.path.append("..")
+from styles import apply_sidebar_style
+apply_sidebar_style()
 
 st.set_page_config(page_title="学校快速导览", page_icon="🏛️")
 st.title("🏛️ 大学校园快速导览")

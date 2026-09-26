@@ -2,8 +2,10 @@ import streamlit as st
 from supabase import create_client
 supabase=create_client(st.secrets["supabase"]["url"], st.secrets["supabase"]["key"])
 
-
-
+import sys
+sys.path.append("..")
+from styles import apply_sidebar_style
+apply_sidebar_style()
 
 # 检查用户是否登录
 if not st.user.is_logged_in:
@@ -55,6 +57,7 @@ def simple_ai_score(text):
     return ai_score, burstiness, diversity
 
 language = st.selectbox("选择语言：", ["español","English","中文"])
+
 
 text_input = st.text_area("输入文本：", height=200, placeholder="在这里粘贴要检测的文本...")
 

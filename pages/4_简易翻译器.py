@@ -1,6 +1,9 @@
 import streamlit as st
 from deep_translator import GoogleTranslator
-
+import sys
+sys.path.append("..")
+from styles import apply_sidebar_style
+apply_sidebar_style()
 st.set_page_config(page_title="简易翻译器", page_icon="🌐")
 st.title("🌐 简易翻译器")
 st.write("支持中文、英文、西班牙语互译。")

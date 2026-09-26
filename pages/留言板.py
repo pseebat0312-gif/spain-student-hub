@@ -1,6 +1,9 @@
 import streamlit as st
 from supabase import create_client
-
+import sys
+sys.path.append("..")
+from styles import apply_sidebar_style
+apply_sidebar_style()
 st.set_page_config(page_title="留言板", page_icon="✍️")
 st.title("✍️ 留言板")
 st.write("欢迎给作者留言！你的留言默认是私密的，只有作者能看见。作者如果觉得内容不错，可能会把它公开~")

@@ -1,36 +1,8 @@
 import streamlit as st
 from supabase import create_client
 
-st.markdown("""
-<style>
-    /* 侧边栏背景色和边框 */
-    [data-testid="stSidebar"] {
-        background-color: #1a1a2e !important;
-        border-right: 3px solid #4a7c59 !important;  /* 抹茶绿边框 */
-    }
-    
-    /* 侧边栏链接：字体更大、纯白色、有圆角边框 */
-    [data-testid="stSidebar"] a {
-        color: #ffffff !important;  /* 纯白色文字 */
-        font-weight: bold !important;
-        font-size: 18px !important;
-        border: 1px solid #4a7c59 !important;  /* 抹茶绿边框 */
-        border-radius: 10px !important;
-        padding: 8px 12px !important;
-        margin-bottom: 5px !important;
-        display: block !important;
-        text-decoration: none !important;
-        transition: all 0.3s ease !important;
-    }
-    
-    /* 鼠标悬停时：背景变抹茶绿，文字保持白色 */
-    [data-testid="stSidebar"] a:hover {
-        background-color: #4a7c59 !important;  /* 抹茶绿背景 */
-        color: #ffffff !important;
-        transform: translateX(5px) !important;  /* 向右滑动 */
-    }
-</style>
-""", unsafe_allow_html=True)
+from styles import apply_sidebar_style
+apply_sidebar_style()
 
 # ===== 页面配置 =====
 st.set_page_config(page_title="西班牙留学生工具站", page_icon="🇪🇸")
