@@ -74,19 +74,15 @@ if posts.data:
                 st.caption("还没有回复，来抢沙发吧！")
             
             # 发回复
-            reply_to = st.text_input("回复给谁（可选）：", key=f"reply_to_{post['id']}")
-            reply_text = st.text_input("回复内容：", key=f"reply_{post['id']}")
-
+            reply_text = st.text_input("回复内容：", key=f"reply_text_{post['id']}")
             if st.button("发送回复", key=f"send_reply_{post['id']}"):
                 if reply_text.strip():
-                    content = f"@{reply_to} {reply_text}" if reply_to.strip() else reply_text
                     supabase.table("replies").insert({
                         "post_id": post["id"],
                         "user_email": st.user.email,
-                        "content": content
-                     }).execute()
+                        "content": reply_text
+                    }).execute()
                     st.rerun()
-
             if st.button("发送回复", key=f"send_reply_{post['id']}"):
                 if reply_text.strip():
                     supabase.table("replies").insert({
