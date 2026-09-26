@@ -6,7 +6,7 @@ st.write("这里汇总了康普顿斯大学最常用的官方入口，方便快�
 
 # --- 学术与教学 ---
 st.subheader("📚 学术与教学")
-col1, col2, col3, col4= st.columns(3)
+col1, col2, col3, col4= st.columns(4)
 with col1:
     st.link_button("UCM 官网", "https://www.ucm.es", use_container_width=True)
 with col2:
@@ -18,7 +18,7 @@ with col4:
 
 # --- 体育与生活 ---
 st.subheader("🏃 体育与生活")
-col4, col5, col6= st.columns(2)
+col4, col5, col6= st.columns(3)
 with col4:
     st.link_button("官网体育主页", "https://www.ucm.es/deportesucm", use_container_width=True)
 with col5:
