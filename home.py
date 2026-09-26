@@ -32,7 +32,7 @@ def safe_execute(query, default=None):
 # ===== 侧边栏：登录区 =====
 with st.sidebar:
     if not st.user.is_logged_in:
-        st.info("💡 登录后可保存检测历史")
+        st.info("💡 登录后可使用全部功能")
         if st.button("使用 Google 登录"):
             st.login()
     else:
@@ -65,61 +65,136 @@ st.divider()
 st.subheader("📂 我的专属空间")
 st.write(f"欢迎回来，{st.user.email}")
 
+import datetime
+import calendar
+import pytz
 
-# ---------- 检测历史 ----------
-if st.button("📜 查看我的检测历史"):
-    only_fav = st.checkbox("⭐ 只看收藏", key="only_fav_checkbox")
+# ===== 顶部时钟 =====
+st.divider()
+st.subheader("🕐 现在时间")
 
-    query = (
-        supabase.table("detection_history")
-        .select("*")
-        .eq("user_email", st.user.email)
-        .order("created_at", desc=True)
-    )
-    if only_fav:
-        query = query.eq("is_favorite", True)
+spain_tz = pytz.timezone("Europe/Madrid")
+china_tz = pytz.timezone("Asia/Shanghai")
 
-    records = safe_execute(query)
+now = datetime.datetime.now()
+spain_time = now.astimezone(spain_tz)
+china_time = now.astimezone(china_tz)
 
-    if not records:
-        st.info("你还没有检测记录。")
-    else:
-        st.write(f"共 {len(records)} 条记录：")
-        for record in records:
-            record_id = record["id"]
-            is_fav = record.get("is_favorite", False)
+col1, col2 = st.columns(2)
+with col1:
+    st.metric("🇪🇸 西班牙时间", spain_time.strftime("%Y-%m-%d %H:%M:%S"))
+with col2:
+    st.metric("🇨🇳 中国时间", china_time.strftime("%Y-%m-%d %H:%M:%S"))
 
-            col1, col2, col3 = st.columns([6, 1, 1])
+# ===== 会动的日历 =====
+st.divider()
+st.subheader("📅 中西文化日历")
 
+today = spain_time.date()
+year = today.year
+month = today.month
+
+# 节日数据
+festivals = {
+    (1, 1): "🎉 元旦",
+    (1, 6): "👑 三王节（西班牙）",
+    (1, 29): "🧧 春节（中国）",
+    (2, 14): "💘 情人节",
+    (3, 8): "👩 妇女节",
+    (3, 19): "👨 父亲节（西班牙）",
+    (4, 23): "📚 世界读书日",
+    (5, 1): "💼 劳动节",
+    (6, 24): "🔥 圣胡安节",
+    (8, 15): "⛪ 圣母升天节",
+    (9, 11): "🏴 加泰罗尼亚日",
+    (10, 1): "🇨🇳 中国国庆",
+    (10, 12): "🇪🇸 西班牙国庆",
+    (11, 1): "👻 万圣节",
+    (12, 6): "📜 宪法日",
+    (12, 8): "⛪ 圣母无染原罪节",
+    (12, 25): "🎄 圣诞节",
+}
+
+# 生成日历
+cal = calendar.monthcalendar(year, month)
+weekdays = ["一", "二", "三", "四", "五", "六", "日"]
+
+html = '<table style="width:100%; text-align:center; border-collapse:collapse;">'
+html += "<tr>"
+for wd in weekdays:
+    html += f'<th style="padding:8px; color:#4a7c59; font-weight:bold;">{wd}</th>'
+html += "</tr>"
+
+for week in cal:
+    html += "<tr>"
+    for day in week:
+        if day == 0:
+            html += '<td style="padding:8px;"></td>'
+        else:
+            is_today = (day == today.day)
+            festival = festivals.get((month, day), "")
+            bg = "#4a7c59" if is_today else "#f0f0f0"
+            color = "white" if is_today else "#333"
+            icon = "🧍" if is_today else ""
+            html += f'<td style="padding:8px; background:{bg}; color:{color}; border-radius:8px; margin:2px;">'
+            html += f'<div style="font-size:14px;">{day} {icon}</div>'
+            if festival:
+                html += f'<div style="font-size:10px;">{festival}</div>'
+            html += "</td>"
+    html += "</tr>"
+
+html += "</table>"
+st.markdown(html, unsafe_allow_html=True)
+
+# ===== 用户日程 =====
+st.divider()
+st.subheader("📝 我的日程")
+
+if st.user.is_logged_in:
+    with st.expander("➕ 添加新日程", expanded=False):
+        col1, col2 = st.columns(2)
+        with col1:
+            event_date = st.date_input("日期：", value=today)
+        with col2:
+            event_title = st.text_input("事项：")
+        
+        if st.button("保存日程", type="primary"):
+            if event_title.strip():
+                supabase.table("schedules").insert({
+                    "user_email": st.user.email,
+                    "event_date": str(event_date),
+                    "title": event_title
+                }).execute()
+                st.success("✅ 日程已保存")
+                st.rerun()
+            else:
+                st.warning("请输入事项内容。")
+    
+    # 显示日程列表
+    schedules = supabase.table("schedules")\
+        .select("*")\
+        .eq("user_email", st.user.email)\
+        .order("event_date", desc=False)\
+        .execute()
+    
+    if schedules.data:
+        for s in schedules.data:
+            col1, col2 = st.columns([6, 1])
             with col1:
-                fav_mark = "⭐" if is_fav else ""
-                st.write(
-                    f"{fav_mark} **时间：** {record['created_at'][:19]} | "
-                    f"**AI概率：** {record['ai_probability']:.2%}"
-                )
-                with st.expander("📄 查看全文"):
-                    st.write(record.get("text_snippet", "（无内容）"))
-
+                st.write(f"📌 **{s['event_date']}**：{s['title']}")
             with col2:
-                if st.button("⭐" if not is_fav else "✅", key=f"fav_{record_id}"):
-                    safe_execute(
-                        supabase.table("detection_history")
-                        .update({"is_favorite": not is_fav})
-                        .eq("id", record_id)
-                    )
+                if st.button("🗑️", key=f"del_schedule_{s['id']}"):
+                    supabase.table("schedules")\
+                        .delete()\
+                        .eq("id", s["id"])\
+                        .execute()
                     st.rerun()
+    else:
+        st.info("你还没有添加日程。")
+else:
+    st.info("登录后可以添加你的个人日程。")
 
-            with col3:
-                if st.button("🗑️", key=f"del_{record_id}"):
-                    safe_execute(
-                        supabase.table("detection_history")
-                        .delete()
-                        .eq("id", record_id)
-                    )
-                    st.success("已删除")
-                    st.rerun()
 
-            st.divider()
 
 
 # ---------- 个人资料 ----------

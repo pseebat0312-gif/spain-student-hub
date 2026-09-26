@@ -1,6 +1,7 @@
 import streamlit as st
 from supabase import create_client
-supabase=create_client(st.secrets["supabase"]["url"], st.secrets["supabase"]["key"])
+
+supabase = create_client(st.secrets["supabase"]["url"], st.secrets["supabase"]["key"])
 
 import sys
 sys.path.append("..")
@@ -97,6 +98,69 @@ if st.button("检测", type="primary"):
                 "ai_probability": ai_prob
             }).execute()
             st.success("✅ 本次检测已保存")
+
+# ---------- 检测历史 ----------
+def safe_execute(query, default=None):
+    try:
+        return query.execute().data
+    except Exception as e:
+        st.error(f"数据库请求失败：{e}")
+        return default if default is not None else []
+    
+if st.button("📜 查看我的检测历史"):
+    only_fav = st.checkbox("⭐ 只看收藏", key="only_fav_checkbox")
+
+    query = (
+        supabase.table("detection_history")
+        .select("*")
+        .eq("user_email", st.user.email)
+        .order("created_at", desc=True)
+    )
+    if only_fav:
+        query = query.eq("is_favorite", True)
+
+    records = safe_execute(query)
+
+    if not records:
+        st.info("你还没有检测记录。")
+    else:
+        st.write(f"共 {len(records)} 条记录：")
+        for record in records:
+            record_id = record["id"]
+            is_fav = record.get("is_favorite", False)
+
+            col1, col2, col3 = st.columns([6, 1, 1])
+
+            with col1:
+                fav_mark = "⭐" if is_fav else ""
+                st.write(
+                    f"{fav_mark} **时间：** {record['created_at'][:19]} | "
+                    f"**AI概率：** {record['ai_probability']:.2%}"
+                )
+                with st.expander("📄 查看全文"):
+                    st.write(record.get("text_snippet", "（无内容）"))
+
+            with col2:
+                if st.button("⭐" if not is_fav else "✅", key=f"fav_{record_id}"):
+                    safe_execute(
+                        supabase.table("detection_history")
+                        .update({"is_favorite": not is_fav})
+                        .eq("id", record_id)
+                    )
+                    st.rerun()
+
+            with col3:
+                if st.button("🗑️", key=f"del_{record_id}"):
+                    safe_execute(
+                        supabase.table("detection_history")
+                        .delete()
+                        .eq("id", record_id)
+                    )
+                    st.success("已删除")
+                    st.rerun()
+
+            st.divider()
+
 
 st.divider()
 st.caption("当前版本基于数学统计法，不依赖外部模型，秒级出结果。")
