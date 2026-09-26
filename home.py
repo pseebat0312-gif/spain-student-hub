@@ -69,15 +69,10 @@ import datetime
 import calendar
 import pytz
 
-# ===== 顶部时钟 =====
-import datetime
-import calendar
-import pytz
-
-# ===== 顶部时钟（实时跳动） =====
 st.divider()
-st.subheader("🕐 现在时间")
 
+# ===== 1. 实时时钟 =====
+st.subheader("🕐 现在时间")
 clock_html = """
 <div style="display:flex; gap:20px; flex-wrap:wrap;">
   <div style="flex:1; background:#1a1a2e; padding:15px; border-radius:12px; border:2px solid #4a7c59; text-align:center; color:white;">
@@ -94,10 +89,8 @@ function updateClocks() {
   const now = new Date();
   const spain = new Date(now.toLocaleString("en-US", {timeZone: "Europe/Madrid"}));
   const china = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Shanghai"}));
-  
   const pad = (n) => String(n).padStart(2, '0');
   const fmt = (d) => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-  
   document.getElementById('spain-clock').innerText = fmt(spain);
   document.getElementById('china-clock').innerText = fmt(china);
 }
@@ -107,15 +100,38 @@ updateClocks();
 """
 st.components.v1.html(clock_html, height=130)
 
+# ===== 2. 今年进度条 =====
+spain_tz = pytz.timezone("Europe/Madrid")
+now = datetime.datetime.now(spain_tz)
+today = now.date()
+year = today.year
 
-# ===== 会动的日历 =====
+days_in_year = 366 if calendar.isleap(year) else 365
+day_of_year = today.timetuple().tm_yday
+days_left = days_in_year - day_of_year
+progress = day_of_year / days_in_year
+
+st.divider()
+st.subheader("📊 今年进度")
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.metric("今天是", f"{today.month}月{today.day}日")
+with col2:
+    st.metric("今年已过", f"{day_of_year} 天")
+with col3:
+    st.metric("今年还剩", f"{days_left} 天")
+st.progress(progress)
+
+# ===== 3. 会动的日历（带月份切换） =====
 st.divider()
 st.subheader("📅 中西文化日历")
 
-spain_tz = pytz.timezone("Europe/Madrid")
-today = datetime.datetime.now(spain_tz).date()
-year = today.year
-month = today.month
+# 月份切换
+col1, col2 = st.columns(2)
+with col1:
+    selected_year = st.selectbox("年份：", [year - 1, year, year + 1], index=1)
+with col2:
+    selected_month = st.selectbox("月份：", list(range(1, 13)), index=today.month - 1)
 
 # 节日数据
 festivals = {
@@ -138,58 +154,22 @@ festivals = {
     (12, 25): "🎄 圣诞节",
 }
 
-cal = calendar.monthcalendar(year, month)
+cal = calendar.monthcalendar(selected_year, selected_month)
 weekdays = ["一", "二", "三", "四", "五", "六", "日"]
 
-# 用 CSS 强制每列等宽
 html = """
 <style>
-    .calendar-table {
-        width: 100%;
-        table-layout: fixed;
-        border-collapse: separate;
-        border-spacing: 6px;
-    }
-    .calendar-table th {
-        padding: 10px;
-        color: #4a7c59;
-        font-weight: bold;
-        font-size: 15px;
-        text-align: center;
-    }
-    .calendar-table td {
-        padding: 10px 5px;
-        text-align: center;
-        border-radius: 10px;
-        height: 80px;
-        vertical-align: top;
-        font-size: 14px;
-    }
-    .today-cell {
-        background: #4a7c59;
-        color: white !important;
-        box-shadow: 0 0 12px #4a7c59;
-    }
-    .normal-cell {
-        background: #2a2a40;
-        color: #ddd;
-    }
-    .festival-text {
-        font-size: 10px;
-        margin-top: 4px;
-        color: #a0d8b3;
-    }
-    .today-cell .festival-text {
-        color: #fff;
-    }
-    .day-icon {
-        font-size: 18px;
-        display: block;
-    }
+    .calendar-table { width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 6px; }
+    .calendar-table th { padding: 10px; color: #4a7c59; font-weight: bold; font-size: 15px; text-align: center; }
+    .calendar-table td { padding: 10px 5px; text-align: center; border-radius: 10px; height: 80px; vertical-align: top; font-size: 14px; }
+    .today-cell { background: #4a7c59; color: white !important; box-shadow: 0 0 12px #4a7c59; }
+    .normal-cell { background: #2a2a40; color: #ddd; }
+    .festival-text { font-size: 10px; margin-top: 4px; color: #a0d8b3; }
+    .today-cell .festival-text { color: #fff; }
+    .day-icon { font-size: 18px; display: block; }
 </style>
 <table class="calendar-table">
 """
-
 html += "<tr>"
 for wd in weekdays:
     html += f"<th>{wd}</th>"
@@ -201,8 +181,8 @@ for week in cal:
         if day == 0:
             html += "<td></td>"
         else:
-            is_today = (day == today.day)
-            festival = festivals.get((month, day), "")
+            is_today = (day == today.day and selected_month == today.month and selected_year == today.year)
+            festival = festivals.get((selected_month, day), "")
             cls = "today-cell" if is_today else "normal-cell"
             icon = "🧍" if is_today else ""
             html += f'<td class="{cls}">'
@@ -212,21 +192,21 @@ for week in cal:
                 html += f'<div class="festival-text">{festival}</div>'
             html += "</td>"
     html += "</tr>"
-
 html += "</table>"
 st.markdown(html, unsafe_allow_html=True)
 
-
-# ===== 用户日程 =====
+# ===== 4. 用户日程（带具体时间） =====
 st.divider()
 st.subheader("📝 我的日程")
 
 if st.user.is_logged_in:
     with st.expander("➕ 添加新日程", expanded=False):
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
         with col1:
             event_date = st.date_input("日期：", value=today)
         with col2:
+            event_time = st.time_input("时间：", value=datetime.time(9, 0))
+        with col3:
             event_title = st.text_input("事项：")
         
         if st.button("保存日程", type="primary"):
@@ -234,6 +214,7 @@ if st.user.is_logged_in:
                 supabase.table("schedules").insert({
                     "user_email": st.user.email,
                     "event_date": str(event_date),
+                    "event_time": str(event_time),
                     "title": event_title
                 }).execute()
                 st.success("✅ 日程已保存")
@@ -251,7 +232,8 @@ if st.user.is_logged_in:
         for s in schedules.data:
             col1, col2 = st.columns([6, 1])
             with col1:
-                st.write(f"📌 **{s['event_date']}**：{s['title']}")
+                time_str = s.get("event_time", "全天")
+                st.write(f"📌 **{s['event_date']} {time_str}**：{s['title']}")
             with col2:
                 if st.button("🗑️", key=f"del_schedule_{s['id']}"):
                     supabase.table("schedules")\
