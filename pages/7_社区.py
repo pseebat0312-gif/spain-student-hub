@@ -83,7 +83,7 @@ if posts.data:
                         "content": reply_text
                     }).execute()
                     st.rerun()
-            if st.button("发送回复", key=f"send_reply_{post['id']}"):
+            if st.button("发送回复", key=f"send_reply_{post['id']}_{len(replies.data)}"):
                 if reply_text.strip():
                     supabase.table("replies").insert({
                         "post_id": post["id"],
