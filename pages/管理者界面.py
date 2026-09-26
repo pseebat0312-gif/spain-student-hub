@@ -90,3 +90,23 @@ if all_msgs.data:
         st.divider()
 else:
     st.info("暂无留言。")
+
+
+st.divider()
+st.subheader("🛒 二手市场管理")
+
+items = supabase.table("marketplace").select("*").order("created_at", desc=True).execute()
+
+if items.data:
+    for item in items.data:
+        col1, col2 = st.columns([6, 1])
+        with col1:
+            st.write(f"**{item['title']}** | 💶 {item['price']} | {item['user_email']}")
+            st.caption(item.get("description", ""))
+        with col2:
+            if st.button("🗑️ 删除", key=f"admin_del_item_{item['id']}"):
+                supabase.table("marketplace").delete().eq("id", item["id"]).execute()
+                st.rerun()
+        st.divider()
+else:
+    st.info("暂无二手物品。")

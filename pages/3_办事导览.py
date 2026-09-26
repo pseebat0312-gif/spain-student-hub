@@ -52,7 +52,7 @@ if school == "续居留":
     
     with st.expander("📌 后续流程与注意事项（点击展开）", expanded=False):
         st.markdown("""
-        **1. 领取新 NIE 卡**：收到批准信后，需在指定时间内前往警察局按指纹并领取新卡。
+        **1. 领取新 NIE 卡**：收到批准信后，需在指定时间内前往警察局按指纹(Toma de huellas)并领取新卡。
         
         **2. 更新住家证明**：如果搬家了，需要重新办理住家证明。
         
@@ -62,12 +62,10 @@ if school == "续居留":
         """)
     
     st.subheader("🔗 申请通过后官方链接")
-    col3, col4 = st.columns(2)
+    col3 = st.columns(1)
     with col3:
         st.link_button("警察局预约系统", "https://sede.administracionespublicas.gob.es/", use_container_width=True)
-    with col4:
-        st.link_button("返乡证办理指南", "https://www.ucm.es/tramitacion-renovacion-nie", use_container_width=True)
-
+    
     # --- 温馨提示 ---
     st.divider()
     st.info("⚠️ 以下信息为整理汇总，具体要求请以西班牙移民局（Extranjería）官方发布为准。")
