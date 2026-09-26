@@ -6,4 +6,5 @@ torch
 torchvision
 deep-translator
 pytz
+streamlit-calendar
 
