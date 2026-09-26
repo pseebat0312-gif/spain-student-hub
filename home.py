@@ -66,6 +66,7 @@ if st.user.is_logged_in:
 else:
     st.info("🔒 登录后可以管理你的专属空间")
 
+
 # ===== 1. 实时时钟 =====
 st.divider()
 st.subheader("🕐 现在时间")
@@ -121,8 +122,9 @@ st.progress(progress)
 
 # ===== 3. 可点击的日历 =====
 st.divider()
-st.subheader("📅 点击日期查看日程")
+st.subheader("📅 点击日期查看详情")
 
+# 拉取当前用户所有日程
 if st.user.is_logged_in:
     schedules = safe_execute(
         supabase.table("schedules")
@@ -132,10 +134,9 @@ if st.user.is_logged_in:
 else:
     schedules = []
 
-
 events = []
 
-# 加上用户的日程（如果登录了）
+# 用户日程（绿色）
 for s in (schedules or []):
     events.append({
         "title": s["title"],
@@ -144,37 +145,38 @@ for s in (schedules or []):
         "color": "#4a7c59"
     })
 
-# 加上中西节日
-festivals = [
-    # 中国节日
-    (f"{today.year}-01-01", "🎉 元旦 / Año Nuevo"),
-    (f"{today.year}-01-29", "🧧 春节 / Año Nuevo Chino"),
-    (f"{today.year}-04-04", "🌿 清明节 / Qingming"),
-    (f"{today.year}-05-01", "💼 劳动节 / Día del Trabajo"),
-    (f"{today.year}-06-10", "🐉 端午节 / Festival del Barco Dragón"),
-    (f"{today.year}-09-17", "🌕 中秋节 / Festival del Medio Otoño"),
-    (f"{today.year}-10-01", "🇨🇳 中国国庆 / Día Nacional de China"),
-    # 西班牙节日
-    (f"{today.year}-01-06", "👑 三王节 / Día de Reyes"),
-    (f"{today.year}-03-19", "👨 父亲节 / Día del Padre"),
-    (f"{today.year}-04-18", "✝️ 圣周 / Semana Santa"),
-    (f"{today.year}-05-04", "👩 母亲节 / Día de la Madre"),
-    (f"{today.year}-06-24", "🔥 圣胡安节 / Noche de San Juan"),
-    (f"{today.year}-08-15", "⛪ 圣母升天节 / Asunción de la Virgen"),
-    (f"{today.year}-10-12", "🇪🇸 西班牙国庆 / Fiesta Nacional de España"),
-    (f"{today.year}-11-01", "👻 万圣节 / Día de Todos los Santos"),
-    (f"{today.year}-12-06", "📜 宪法日 / Día de la Constitución"),
-    (f"{today.year}-12-08", "⛪ 圣母无染原罪节 / Inmaculada Concepción"),
-    (f"{today.year}-12-25", "🎄 圣诞节 / Navidad"),
-]
+# 节日数据（简称 + 全名）
+festivals = {
+    # 中国节日（红色）
+    f"{today.year}-01-01": {"short": "🎉 元旦", "full": "元旦（中国 / Año Nuevo）", "color": "#e74c3c"},
+    f"{today.year}-01-29": {"short": "🧧 春节", "full": "春节（中国 / Año Nuevo Chino）", "color": "#e74c3c"},
+    f"{today.year}-04-04": {"short": "🌿 清明", "full": "清明节（中国 / Qingming）", "color": "#e74c3c"},
+    f"{today.year}-05-01": {"short": "💼 劳动节", "full": "劳动节（中国+西班牙 / Día del Trabajo）", "color": "#e74c3c"},
+    f"{today.year}-06-10": {"short": "🐉 端午", "full": "端午节（中国 / Festival del Barco Dragón）", "color": "#e74c3c"},
+    f"{today.year}-09-17": {"short": "🌕 中秋", "full": "中秋节（中国 / Festival del Medio Otoño）", "color": "#e74c3c"},
+    f"{today.year}-10-01": {"short": "🇨🇳 中国国庆", "full": "中国国庆（China / Día Nacional de China）", "color": "#e74c3c"},
+    
+    # 西班牙节日（蓝色）
+    f"{today.year}-01-06": {"short": "👑 三王节", "full": "三王节（西班牙 / Día de Reyes）", "color": "#3498db"},
+    f"{today.year}-03-19": {"short": "👨 父亲节", "full": "父亲节（西班牙 / Día del Padre）", "color": "#3498db"},
+    f"{today.year}-04-18": {"short": "✝️ 圣周", "full": "圣周（西班牙 / Semana Santa）", "color": "#3498db"},
+    f"{today.year}-05-04": {"short": "👩 母亲节", "full": "母亲节（西班牙 / Día de la Madre）", "color": "#3498db"},
+    f"{today.year}-06-24": {"short": "🔥 圣胡安", "full": "圣胡安节（西班牙 / Noche de San Juan）", "color": "#3498db"},
+    f"{today.year}-08-15": {"short": "⛪ 圣母升天", "full": "圣母升天节（西班牙 / Asunción de la Virgen）", "color": "#3498db"},
+    f"{today.year}-10-12": {"short": "🇪🇸 西班牙国庆", "full": "西班牙国庆（España / Fiesta Nacional）", "color": "#3498db"},
+    f"{today.year}-11-01": {"short": "👻 万圣节", "full": "万圣节（西班牙 / Día de Todos los Santos）", "color": "#3498db"},
+    f"{today.year}-12-06": {"short": "📜 宪法日", "full": "宪法日（西班牙 / Día de la Constitución）", "color": "#3498db"},
+    f"{today.year}-12-08": {"short": "⛪ 圣母无染", "full": "圣母无染原罪节（西班牙 / Inmaculada Concepción）", "color": "#3498db"},
+    f"{today.year}-12-25": {"short": "🎄 圣诞", "full": "圣诞节（西班牙 / Navidad）", "color": "#3498db"},
+}
 
-for date_str, title in festivals:
+# 把节日加进日历
+for date_str, info in festivals.items():
     events.append({
-        "title": title,
-        "start": f"{date_str}T00:00:00",
-        "end": f"{date_str}T23:59:59",
-        "color": "#f5e6a3",
-        "allDay": True
+        "title": info["short"],
+        "start": date_str,
+        "allDay": True,
+        "color": info["color"]
     })
 
 calendar_options = {
@@ -186,91 +188,77 @@ calendar_options = {
         "center": "title",
         "right": "dayGridMonth,listMonth"
     },
+    "eventDisplay": "block",
+    "dayMaxEvents": 2,
 }
 
-cal_result = st_calendar(events=events, options=calendar_options, key="my_calendar")
-
-# 如果用户点了某天，就存起来
-if cal_result and cal_result.get("dateClick"):
-    raw_date = cal_result["dateClick"]["date"][:10]
-    # 直接加一整天
-    parsed = datetime.datetime.strptime(raw_date, "%Y-%m-%d") + datetime.timedelta(days=1)
-    clicked_date = parsed.strftime("%Y-%m-%d")
-    st.session_state["clicked_date"] = clicked_date
-
+cal_result = calendar(events=events, options=calendar_options, key="my_calendar")
 
 # ===== 未登录：到此为止 =====
 if not st.user.is_logged_in:
     st.stop()
 
-    
-# ===== 4. 当天日程详情 =====
+
+# 如果用户点了某天，就存起来
+if cal_result and cal_result.get("dateClick"):
+    raw_date = cal_result["dateClick"]["date"][:10]
+    parsed = datetime.datetime.strptime(raw_date, "%Y-%m-%d") + datetime.timedelta(hours=12)
+    clicked_date = parsed.strftime("%Y-%m-%d")
+    st.session_state["clicked_date"] = clicked_date
+
+
+# ===== 4. 当天详情 =====
 if "clicked_date" in st.session_state and st.session_state["clicked_date"]:
     clicked_date = st.session_state["clicked_date"]
     st.divider()
-    st.subheader(f"📌 {clicked_date} 的日程")
-
-    day_schedules = safe_execute(
-        supabase.table("schedules")
-        .select("*")
-        .eq("user_email", st.user.email)
-        .eq("event_date", clicked_date)
-        .order("event_time", desc=False)
-    )
-
-    if day_schedules:
-        for s in day_schedules:
-            col1, col2 = st.columns([6, 1])
-            with col1:
-                time_str = s.get("event_time", "全天")
-                st.write(f"⏰ **{time_str}** — {s['title']}")
-            with col2:
-                if st.button("🗑️", key=f"del_day_{s['id']}"):
-                    supabase.table("schedules")\
-                        .delete()\
-                        .eq("id", s["id"])\
-                        .execute()
+    st.subheader(f"📌 {clicked_date} 的详情")
+    
+    # 当天节日
+    if clicked_date in festivals:
+        info = festivals[clicked_date]
+        st.success(f"🎊 **{info['full']}**")
+        st.caption("📖 节日介绍即将添加...")
+    
+    # 当天用户日程
+    if st.user.is_logged_in:
+        day_schedules = safe_execute(
+            supabase.table("schedules")
+            .select("*")
+            .eq("user_email", st.user.email)
+            .eq("event_date", clicked_date)
+            .order("event_time", desc=False)
+        )
+        
+        if day_schedules:
+            st.write("**你的日程：**")
+            for s in day_schedules:
+                col1, col2 = st.columns([6, 1])
+                with col1:
+                    time_str = s.get("event_time", "全天")
+                    st.write(f"⏰ **{time_str}** — {s['title']}")
+                with col2:
+                    if st.button("🗑️", key=f"del_day_{s['id']}"):
+                        supabase.table("schedules")\
+                            .delete()\
+                            .eq("id", s["id"])\
+                            .execute()
+                        st.rerun()
+        else:
+            st.info("这一天还没有你的日程。")
+        
+        with st.expander("➕ 在这一天添加日程", expanded=False):
+            event_time = st.time_input("时间：", value=datetime.time(9, 0), key=f"time_{clicked_date}")
+            event_title = st.text_input("事项：", key=f"title_{clicked_date}")
+            if st.button("保存", key=f"save_{clicked_date}"):
+                if event_title.strip():
+                    supabase.table("schedules").insert({
+                        "user_email": st.user.email,
+                        "event_date": clicked_date,
+                        "event_time": str(event_time),
+                        "title": event_title
+                    }).execute()
+                    st.success("✅ 已添加")
                     st.rerun()
     else:
-        st.info("这一天还没有日程。")
-
-    with st.expander("➕ 在这一天添加日程", expanded=False):
-        event_time = st.time_input("时间：", value=datetime.time(9, 0), key=f"time_{clicked_date}")
-        event_title = st.text_input("事项：", key=f"title_{clicked_date}")
-        if st.button("保存", key=f"save_{clicked_date}"):
-            if event_title.strip():
-                supabase.table("schedules").insert({
-                    "user_email": st.user.email,
-                    "event_date": clicked_date,
-                    "event_time": str(event_time),
-                    "title": event_title
-                }).execute()
-                st.success("✅ 已添加")
-                st.rerun()
-
-# ===== 5. 我的所有日程列表 =====
-st.divider()
-st.subheader("📝 我所有的日程")
-
-all_schedules = safe_execute(
-    supabase.table("schedules")
-    .select("*")
-    .eq("user_email", st.user.email)
-    .order("event_date", desc=False)
-)
-
-if all_schedules:
-    for s in all_schedules:
-        col1, col2 = st.columns([6, 1])
-        with col1:
-            time_str = s.get("event_time", "全天")
-            st.write(f"📌 **{s['event_date']} {time_str}**：{s['title']}")
-        with col2:
-            if st.button("🗑️", key=f"del_all_{s['id']}"):
-                supabase.table("schedules")\
-                    .delete()\
-                    .eq("id", s["id"])\
-                    .execute()
-                st.rerun()
-else:
-    st.info("你还没有添加日程。")
+        st.info("🔒 登录后可以添加和管理你的日程。")
+        
