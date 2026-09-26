@@ -3,7 +3,7 @@ import datetime
 import calendar
 import pytz
 from supabase import create_client
-from streamlit_calendar import calendar
+from streamlit_calendar import calendar as st_calendar
 from styles import apply_sidebar_style
 
 apply_sidebar_style()
@@ -147,7 +147,7 @@ calendar_options = {
     },
 }
 
-cal_result = calendar(events=events, options=calendar_options, key="my_calendar")
+cal_result = st_calendar(events=events, options=calendar_options, key="my_calendar")
 
 # 如果用户点了某天，就存起来
 if cal_result and cal_result.get("dateClick"):
