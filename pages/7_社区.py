@@ -41,16 +41,14 @@ st.divider()
 sort_by = st.selectbox("排序方式：", ["最新发布", "最多回复"])
 
 if sort_by == "最新发布":
-    posts = supabase.table("posts").select("*").order("created_at", desc=True).execute()
+    posts_data = supabase.table("posts").select("*").order("created_at", desc=True).execute().data
 else:
-    # 先拿到所有帖子
     all_posts = supabase.table("posts").select("*").execute().data
-    # 算每个帖子的回复数
-    posts = {"data": sorted(
+    posts_data = sorted(
         all_posts,
         key=lambda p: len(supabase.table("replies").select("*").eq("post_id", p["id"]).execute().data),
         reverse=True
-    )}
+    )
 
 if posts.data:
     for post in posts.data:
