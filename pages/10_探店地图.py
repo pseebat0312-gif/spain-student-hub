@@ -34,38 +34,10 @@ if clicked and clicked.get("last_clicked"):
     name = st.text_input("店名：")
     city = st.text_input("城市：")
     desc = st.text_area("推荐理由：")
-    from streamlit_folium import st_folium
-import folium
-
-st.subheader("➕ 推荐一家店")
-
-# 用 folium 建一张地图
-m = folium.Map(location=[40.4168, -3.7038], zoom_start=6)
-
-# 让用户点击地图
-clicked = st_folium(m, height=400, width=700, key="pick_map")
-
-# 如果用户点了地图，就会返回坐标
-if clicked and clicked.get("last_clicked"):
-    lat = clicked["last_clicked"]["lat"]
-    lng = clicked["last_clicked"]["lng"]
-    st.success(f"你选择了坐标：{lat:.4f}, {lng:.4f}")
-    
-    name = st.text_input("店名：")
-    city = st.text_input("城市：")
-    desc = st.text_area("推荐理由：")
-    
-    if st.button("发布"):
-        supabase.table("shops").insert({
-            "user_email": user_email,
-            "name": name,
-            "city": city,
-            "description": desc,
-            "latitude": lat,
-            "longitude": lng,
-            "is_recommend": True
-        }).execute()
-        st.rerun()
+    st.link_button(
+            "🚗 用 Google Maps 导航",
+            f"https://www.google.com/maps/dir/?api=1&destination={d['lat']},{d['lon']}"
+        )
     
     if st.button("发布"):
         supabase.table("shops").insert({
