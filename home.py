@@ -140,30 +140,26 @@ events = []
 for s in (schedules or []):
     # 节日数据：short = 日历上显示的简称，full = 点开后的全名
     festivals = {
-        # 中国节日（红色）
-        f"{today.year}-01-01": {"short": "元旦", "full": "元旦（中国 / Año Nuevo）", "color": "#e74c3c"},
-        f"{today.year}-01-29": {"short": "春节", "full": "春节（中国 / Año Nuevo Chino）", "color": "#e74c3c"},
-        f"{today.year}-04-04": {"short": "清明", "full": "清明节（中国 / Qingming）", "color": "#e74c3c"},
-        f"{today.year}-05-01": {"short": "劳动节", "full": "劳动节（中国+西班牙 / Día del Trabajo）", "color": "#e74c3c"},
-        f"{today.year}-06-10": {"short": "端午", "full": "端午节（中国 / Festival del Barco Dragón）", "color": "#e74c3c"},
-        f"{today.year}-09-17": {"short": "中秋", "full": "中秋节（中国 / Festival del Medio Otoño）", "color": "#e74c3c"},
-        f"{today.year}-10-01": {"short": "中国国庆", "full": "中国国庆（China / Día Nacional de China）", "color": "#e74c3c"},
-        
-        # 西班牙节日（蓝色）
-        f"{today.year}-01-06": {"short": "三王节", "full": "三王节（西班牙 / Día de Reyes）", "color": "#3498db"},
-        f"{today.year}-03-19": {"short": "父亲节", "full": "父亲节（西班牙 / Día del Padre）", "color": "#3498db"},
-        f"{today.year}-04-18": {"short": "圣周", "full": "圣周（西班牙 / Semana Santa）", "color": "#3498db"},
-        f"{today.year}-05-04": {"short": "母亲节", "full": "母亲节（西班牙 / Día de la Madre）", "color": "#3498db"},
-        f"{today.year}-06-24": {"short": "圣胡安", "full": "圣胡安节（西班牙 / Noche de San Juan）", "color": "#3498db"},
-        f"{today.year}-08-15": {"short": "圣母升天", "full": "圣母升天节（西班牙 / Asunción de la Virgen）", "color": "#3498db"},
-        f"{today.year}-10-12": {"short": "西班牙国庆", "full": "西班牙国庆（España / Fiesta Nacional）", "color": "#3498db"},
-        f"{today.year}-11-01": {"short": "万圣节", "full": "万圣节（西班牙 / Día de Todos los Santos）", "color": "#3498db"},
-        f"{today.year}-12-06": {"short": "宪法日", "full": "宪法日（西班牙 / Día de la Constitución）", "color": "#3498db"},
-        f"{today.year}-12-08": {"short": "圣母无染", "full": "圣母无染原罪节（西班牙 / Inmaculada Concepción）", "color": "#3498db"},
-        f"{today.year}-12-25": {"short": "圣诞", "full": "圣诞节（西班牙 / Navidad）", "color": "#3498db"},
-    }
+    f"{today.year}-01-01": {"short": "元旦", "full": "元旦（中国 / Ano Nuevo）", "color": "#e74c3c"},
+    f"{today.year}-01-29": {"short": "春节", "full": "春节（中国 / Ano Nuevo Chino）", "color": "#e74c3c"},
+    f"{today.year}-04-04": {"short": "清明", "full": "清明节（中国 / Qingming）", "color": "#e74c3c"},
+    f"{today.year}-05-01": {"short": "劳动节", "full": "劳动节（中国+西班牙 / Dia del Trabajo）", "color": "#e74c3c"},
+    f"{today.year}-06-10": {"short": "端午", "full": "端午节（中国 / Festival del Barco Dragon）", "color": "#e74c3c"},
+    f"{today.year}-09-17": {"short": "中秋", "full": "中秋节（中国 / Festival del Medio Otono）", "color": "#e74c3c"},
+    f"{today.year}-10-01": {"short": "中国国庆", "full": "中国国庆（China / Dia Nacional）", "color": "#e74c3c"},
+    f"{today.year}-01-06": {"short": "三王节", "full": "三王节（西班牙 / Dia de Reyes）", "color": "#3498db"},
+    f"{today.year}-03-19": {"short": "父亲节", "full": "父亲节（西班牙 / Dia del Padre）", "color": "#3498db"},
+    f"{today.year}-04-18": {"short": "圣周", "full": "圣周（西班牙 / Semana Santa）", "color": "#3498db"},
+    f"{today.year}-05-04": {"short": "母亲节", "full": "母亲节（西班牙 / Dia de la Madre）", "color": "#3498db"},
+    f"{today.year}-06-24": {"short": "圣胡安", "full": "圣胡安节（西班牙 / Noche de San Juan）", "color": "#3498db"},
+    f"{today.year}-08-15": {"short": "圣母升天", "full": "圣母升天节（西班牙 / Asuncion de la Virgen）", "color": "#3498db"},
+    f"{today.year}-10-12": {"short": "西班牙国庆", "full": "西班牙国庆（Espana / Fiesta Nacional）", "color": "#3498db"},
+    f"{today.year}-11-01": {"short": "万圣节", "full": "万圣节（西班牙 / Dia de Todos los Santos）", "color": "#3498db"},
+    f"{today.year}-12-06": {"short": "宪法日", "full": "宪法日（西班牙 / Dia de la Constitucion）", "color": "#3498db"},
+    f"{today.year}-12-08": {"short": "圣母无染", "full": "圣母无染原罪节（西班牙 / Inmaculada Concepcion）", "color": "#3498db"},
+    f"{today.year}-12-25": {"short": "圣诞", "full": "圣诞节（西班牙 / Navidad）", "color": "#3498db"},
+}
 
-# 把节日加进日历（只显示简称）
 for date_str, info in festivals.items():
     events.append({
         "title": info["short"],
