@@ -12,14 +12,18 @@ st.set_page_config(page_title="西班牙留学生工具站", page_icon="🇪🇸
 st.title("🇪🇸 西班牙留学生一站式工具站")
 st.write("¡Bienvenidos! 请从左侧选择你要用的工具。")
 
-# ===== 首页海报 =====
-st.markdown("### 👋 刚到西班牙？先看看这个")
+st.image("https://i.postimg.cc/CLQy7rxg/2.jpg", use_container_width=True)
 
 st.markdown(f"""
-<a href=" " target="_self">
-    < img src="{https://i.postimg.cc/CLQy7rxg/2.jpg}" style="width:100%; border-radius:12px; cursor:pointer; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+<a href=" " target="_self" style="display:block; text-align:center; text-decoration:none;">
+    <div style="background:#4a7c59; color:white; padding:12px; border-radius:10px; font-weight:bold; font-size:16px;">
+        🚀 点击进入落地第一周攻略
+    </div>
 </a >
 """, unsafe_allow_html=True)
+
+if st.button("🚀 进入落地第一周攻略", type="primary", use_container_width=True):
+    st.switch_page("pages/_落地第一周.py")
 
 if st.button("🚀 进入落地第一周攻略", type="primary", use_container_width=True):
     st.switch_page("pages/_落地第一周.py")
