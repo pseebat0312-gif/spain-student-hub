@@ -24,10 +24,6 @@ st.write("欢迎给作者留言！你的留言默认是私密的，只有作者�
 # 连接数据库
 supabase = create_client(st.secrets["supabase"]["url"], st.secrets["supabase"]["key"])
 
-# 检查登录
-if not st.user.is_logged_in:
-    st.warning("请先在首页登录，才能留言。")
-    st.stop()
 
 st.divider()
 
@@ -40,7 +36,7 @@ if st.button("发送留言", type="primary"):
         st.warning("留言不能为空。")
     else:
         supabase.table("messages").insert({
-            "user_email": st.user.email,
+            "user_email": user_email,
             "content": message
         }).execute()
         st.success("✅ 留言已发送！作者会尽快看。")
@@ -52,7 +48,7 @@ st.divider()
 st.subheader("📜 我的留言记录")
 my_msgs = supabase.table("messages")\
     .select("*")\
-    .eq("user_email", st.user.email)\
+    .eq("user_email", user_email)\
     .order("created_at", desc=True)\
     .execute()
 
