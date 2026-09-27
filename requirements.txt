@@ -7,4 +7,5 @@ torchvision
 deep-translator
 pytz
 streamlit-calendar
+bcrypt
 
