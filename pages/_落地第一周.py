@@ -11,9 +11,6 @@ st.title("🧳 落地第一周攻略")
 st.write("刚到西班牙，按顺序来，不慌。每一项一进来就能看到。")
 
 st.divider()
-
-col1, col2, col3 = st.columns(3)
-
 # ===== 底部：手机卡推荐器 =====
 st.divider()
 st.subheader("🎯 不知道选哪个？点这里让我推荐")
@@ -43,6 +40,11 @@ with st.expander("📱 手机卡推荐器", expanded=True):
             st.success("推荐：Orange Joven 或 Vodafone Yu（€15-19/月，学生优惠）")
             st.markdown("👉 [点此进入 Orange 官网](https://www.orange.es)")
             st.markdown("👉 [点此进入 Vodafone 官网](https://www.vodafone.es)")
+
+st.divider
+
+col1, col2, col3 = st.columns(3)
+
 
 # ===== 第一列：手机卡 =====
 with col1:
