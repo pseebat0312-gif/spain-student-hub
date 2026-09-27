@@ -55,7 +55,38 @@ if st.user.is_logged_in:
             "user_email": st.user.email
         }).execute()
         st.session_state["logged_in_once"] = True
+        
+# ===== 时钟 =====
+st.divider()
+st.subheader("🕐 现在时间")
+clock_html = """
+<div style="display:flex; gap:20px; flex-wrap:wrap;">
+  <div style="flex:1; background:#1a1a2e; padding:15px; border-radius:12px; border:2px solid #4a7c59; text-align:center; color:white;">
+    <div style="font-size:16px; color:#a0d8b3;">🇪🇸 西班牙时间</div>
+    <div id="spain-clock" style="font-size:22px; font-weight:bold; margin-top:8px;">--:--:--</div>
+  </div>
+  <div style="flex:1; background:#1a1a2e; padding:15px; border-radius:12px; border:2px solid #4a7c59; text-align:center; color:white;">
+    <div style="font-size:16px; color:#a0d8b3;">🇨🇳 中国时间</div>
+    <div id="china-clock" style="font-size:22px; font-weight:bold; margin-top:8px;">--:--:--</div>
+  </div>
+</div>
+<script>
+function updateClocks() {
+  const now = new Date();
+  const spain = new Date(now.toLocaleString("en-US", {timeZone: "Europe/Madrid"}));
+  const china = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Shanghai"}));
+  const pad = (n) => String(n).padStart(2, '0');
+  const fmt = (d) => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  document.getElementById('spain-clock').innerText = fmt(spain);
+  document.getElementById('china-clock').innerText = fmt(china);
+}
+setInterval(updateClocks, 1000);
+updateClocks();
+</script>
+"""
+st.components.v1.html(clock_html, height=130)
 
+# ===== 今年进度（紧凑版） =====
 spain_tz = pytz.timezone("Europe/Madrid")
 now = datetime.datetime.now(spain_tz)
 today = now.date()
@@ -135,37 +166,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ===== 时钟 =====
-st.divider()
-st.subheader("🕐 现在时间")
-clock_html = """
-<div style="display:flex; gap:20px; flex-wrap:wrap;">
-  <div style="flex:1; background:#1a1a2e; padding:15px; border-radius:12px; border:2px solid #4a7c59; text-align:center; color:white;">
-    <div style="font-size:16px; color:#a0d8b3;">🇪🇸 西班牙时间</div>
-    <div id="spain-clock" style="font-size:22px; font-weight:bold; margin-top:8px;">--:--:--</div>
-  </div>
-  <div style="flex:1; background:#1a1a2e; padding:15px; border-radius:12px; border:2px solid #4a7c59; text-align:center; color:white;">
-    <div style="font-size:16px; color:#a0d8b3;">🇨🇳 中国时间</div>
-    <div id="china-clock" style="font-size:22px; font-weight:bold; margin-top:8px;">--:--:--</div>
-  </div>
-</div>
-<script>
-function updateClocks() {
-  const now = new Date();
-  const spain = new Date(now.toLocaleString("en-US", {timeZone: "Europe/Madrid"}));
-  const china = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Shanghai"}));
-  const pad = (n) => String(n).padStart(2, '0');
-  const fmt = (d) => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-  document.getElementById('spain-clock').innerText = fmt(spain);
-  document.getElementById('china-clock').innerText = fmt(china);
-}
-setInterval(updateClocks, 1000);
-updateClocks();
-</script>
-"""
-st.components.v1.html(clock_html, height=130)
 
-# ===== 今年进度（紧凑版） =====
 
 
 # ===== 倒计时卡片 =====
