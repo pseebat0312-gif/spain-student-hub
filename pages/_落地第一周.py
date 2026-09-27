@@ -11,10 +11,9 @@ st.title("🧳 落地第一周攻略")
 st.write("刚到西班牙，按顺序来，不慌。每一项一进来就能看到。")
 
 st.divider()
-# ===== 底部：手机卡推荐器 =====
-st.divider()
-st.subheader("🎯 不知道选哪个？点这里让我推荐")
 
+# ===== 推荐器（最上面） =====
+st.subheader("🎯 不知道选哪个？先点这里")
 with st.expander("📱 手机卡推荐器", expanded=True):
     col_a, col_b, col_c = st.columns(3)
     with col_a:
@@ -23,28 +22,28 @@ with st.expander("📱 手机卡推荐器", expanded=True):
         budget = st.selectbox("月预算：", ["<10欧", "10-20欧", "20-30欧"], key="budget")
     with col_c:
         data_need = st.selectbox("流量需求：", ["<10GB", "10-30GB", ">30GB"], key="data")
-    
+
     if st.button("🔍 推荐", key="recommend"):
         if stay == "少于1个月":
             st.success("推荐：Lycamobile 或 Lebara 预付费卡（机场/烟草店，10欧）")
-            st.markdown("👉 [点此进入 Lycamobile 官网](https://www.lycamobile.es)")
-            st.markdown("👉 [点此进入 Lebara 官网](https://www.lebara.es)")
+            st.link_button("📱 去 Lycamobile 官网", "https://www.lycamobile.es", use_container_width=True)
+            st.link_button("📱 去 Lebara 官网", "https://www.lebara.es", use_container_width=True)
         elif budget == "<10欧":
             st.success("推荐：Digi（€3/月3GB 起，最便宜）")
-            st.markdown("👉 [点此进入 Digi 官网](https://www.digi.es)")
+            st.link_button("📱 去 Digi 官网", "https://www.digi.es", use_container_width=True)
         elif data_need == ">30GB":
             st.success("推荐：O2 或 Lowi（€20/月50-60GB，信号好）")
-            st.markdown("👉 [点此进入 O2 官网](https://www.o2online.es)")
-            st.markdown("👉 [点此进入 Lowi 官网](https://www.lowi.es)")
+            st.link_button("📱 去 O2 官网", "https://www.o2online.es", use_container_width=True)
+            st.link_button("📱 去 Lowi 官网", "https://www.lowi.es", use_container_width=True)
         else:
             st.success("推荐：Orange Joven 或 Vodafone Yu（€15-19/月，学生优惠）")
-            st.markdown("👉 [点此进入 Orange 官网](https://www.orange.es)")
-            st.markdown("👉 [点此进入 Vodafone 官网](https://www.vodafone.es)")
+            st.link_button("📱 去 Orange 官网", "https://www.orange.es", use_container_width=True)
+            st.link_button("📱 去 Vodafone 官网", "https://www.vodafone.es", use_container_width=True)
 
 st.divider()
 
+# ===== 三列 =====
 col1, col2, col3 = st.columns(3)
-
 
 # ===== 第一列：手机卡 =====
 with col1:
@@ -65,15 +64,13 @@ with col1:
     """)
     
     st.markdown("**🔗 点这里直接去官网**")
-    st.markdown("""
-    - [Digi 官网](https://www.digi.es)
-    - [Lycamobile 官网](https://www.lycamobile.es)
-    - [Lowi 官网](https://www.lowi.es)
-    - [O2 官网](https://www.o2online.es)
-    - [Orange 官网](https://www.orange.es)
-    - [Vodafone 官网](https://www.vodafone.es)
-    - [Movistar 官网](https://www.movistar.es)
-    """)
+    st.link_button("📱 Digi 官网", "https://www.digi.es", use_container_width=True)
+    st.link_button("📱 Lycamobile 官网", "https://www.lycamobile.es", use_container_width=True)
+    st.link_button("📱 Lowi 官网", "https://www.lowi.es", use_container_width=True)
+    st.link_button("📱 O2 官网", "https://www.o2online.es", use_container_width=True)
+    st.link_button("📱 Orange 官网", "https://www.orange.es", use_container_width=True)
+    st.link_button("📱 Vodafone 官网", "https://www.vodafone.es", use_container_width=True)
+    st.link_button("📱 Movistar 官网", "https://www.movistar.es", use_container_width=True)
     
     st.markdown("**🏪 在哪办？**")
     st.write("- 机场/烟草店：适合短期")
@@ -93,11 +90,9 @@ with col2:
     st.write("- **青年卡（<26岁）**：€10/月，全区域无限坐")
     
     st.markdown("**🔗 官网链接**")
-    st.markdown("""
-    - [CRTM 马德里交通官网](https://www.crtm.es)
-    - [青年卡在线申请](https://tarjetatransportepublico.crtm.es)
-    - [TMB 巴塞罗那交通官网](https://www.tmb.cat)
-    """)
+    st.link_button("🚇 CRTM 马德里交通官网", "https://www.crtm.es", use_container_width=True)
+    st.link_button("🚇 青年卡在线申请", "https://tarjetatransportepublico.crtm.es", use_container_width=True)
+    st.link_button("🚇 TMB 巴塞罗那交通官网", "https://www.tmb.cat", use_container_width=True)
     
     st.markdown("**🎫 充值步骤（地铁站自动售票机）**")
     st.markdown("""
@@ -126,12 +121,10 @@ with col3:
     """)
     
     st.markdown("**🔗 银行官网**")
-    st.markdown("""
-    - [Santander](https://www.santander.es)
-    - [BBVA](https://www.bbva.es)
-    - [CaixaBank](https://www.caixabank.es)
-    - [N26](https://n26.com)
-    """)
+    st.link_button("🏦 Santander 官网", "https://www.santander.es", use_container_width=True)
+    st.link_button("🏦 BBVA 官网", "https://www.bbva.es", use_container_width=True)
+    st.link_button("🏦 CaixaBank 官网", "https://www.caixabank.es", use_container_width=True)
+    st.link_button("🏦 N26 官网", "https://n26.com", use_container_width=True)
     
     st.write("**开户需要：** 护照 + NIE + 住家证明 + 注册单")
     st.warning("⚠️ N26/Revolut 续居留可能被拒，建议办实体银行。")
@@ -146,12 +139,8 @@ with col3:
     """)
     
     st.markdown("**🔗 医保官网**")
-    st.markdown("""
-    - [Adeslas](https://www.adeslas.es)
-    - [Sanitas](https://www.sanitas.es)
-    - [Asisa](https://www.asisa.es)
-    """)
+    st.link_button("🏥 Adeslas 官网", "https://www.adeslas.es", use_container_width=True)
+    st.link_button("🏥 Sanitas 官网", "https://www.sanitas.es", use_container_width=True)
+    st.link_button("🏥 Asisa 官网", "https://www.asisa.es", use_container_width=True)
     
     st.info("💡 续居留必须提供医保，建议提前办。")
-
-
