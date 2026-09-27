@@ -86,7 +86,7 @@ if shops:
             layers=[layer],
             initial_view_state=view_state,
             tooltip=tooltip,
-            map_style="mapbox://styles/mapbox/light-v10"
+            map_style="mapbox://styles/mapbox/streets-v10"
         ))
     else:
         st.info("还没有人添加坐标，去发布第一条吧。")
