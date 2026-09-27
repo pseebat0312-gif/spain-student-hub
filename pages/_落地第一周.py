@@ -6,19 +6,19 @@ apply_sidebar_style()
 import streamlit as st
 
 st.set_page_config(page_title="落地第一周", page_icon="🧳", layout="wide")
-
 st.page_link("home.py", label="⬅️ 返回首页", icon="🏠")
-
 st.title("🧳 落地第一周攻略")
 st.write("刚到西班牙，按顺序来，不慌。每一项一进来就能看到。")
 
 st.divider()
 
-# ===== 底部：互动推荐 =====
+col1, col2, col3 = st.columns(3)
+
+# ===== 底部：手机卡推荐器 =====
 st.divider()
 st.subheader("🎯 不知道选哪个？点这里让我推荐")
 
-with st.expander("📱 手机卡推荐器", expanded=False):
+with st.expander("📱 手机卡推荐器", expanded=True):
     col_a, col_b, col_c = st.columns(3)
     with col_a:
         stay = st.selectbox("停留时长：", ["少于1个月", "3-6个月", "1年以上"], key="stay")
@@ -29,16 +29,20 @@ with st.expander("📱 手机卡推荐器", expanded=False):
     
     if st.button("🔍 推荐", key="recommend"):
         if stay == "少于1个月":
-            st.success("推荐：Lycamobile / Lebara 预付费卡（机场或烟草店，10欧）")
+            st.success("推荐：Lycamobile 或 Lebara 预付费卡（机场/烟草店，10欧）")
+            st.markdown("👉 [点此进入 Lycamobile 官网](https://www.lycamobile.es)")
+            st.markdown("👉 [点此进入 Lebara 官网](https://www.lebara.es)")
         elif budget == "<10欧":
             st.success("推荐：Digi（€3/月3GB 起，最便宜）")
+            st.markdown("👉 [点此进入 Digi 官网](https://www.digi.es)")
         elif data_need == ">30GB":
             st.success("推荐：O2 或 Lowi（€20/月50-60GB，信号好）")
+            st.markdown("👉 [点此进入 O2 官网](https://www.o2online.es)")
+            st.markdown("👉 [点此进入 Lowi 官网](https://www.lowi.es)")
         else:
             st.success("推荐：Orange Joven 或 Vodafone Yu（€15-19/月，学生优惠）")
-
-# ===== 三列布局 =====
-col1, col2, col3 = st.columns(3)
+            st.markdown("👉 [点此进入 Orange 官网](https://www.orange.es)")
+            st.markdown("👉 [点此进入 Vodafone 官网](https://www.vodafone.es)")
 
 # ===== 第一列：手机卡 =====
 with col1:
@@ -58,6 +62,17 @@ with col1:
     | Movistar | €25+ | 25GB | 最贵最好 |
     """)
     
+    st.markdown("**🔗 点这里直接去官网**")
+    st.markdown("""
+    - [Digi 官网](https://www.digi.es)
+    - [Lycamobile 官网](https://www.lycamobile.es)
+    - [Lowi 官网](https://www.lowi.es)
+    - [O2 官网](https://www.o2online.es)
+    - [Orange 官网](https://www.orange.es)
+    - [Vodafone 官网](https://www.vodafone.es)
+    - [Movistar 官网](https://www.movistar.es)
+    """)
+    
     st.markdown("**🏪 在哪办？**")
     st.write("- 机场/烟草店：适合短期")
     st.write("- 市区营业厅：需要 NIE")
@@ -73,15 +88,25 @@ with col2:
     st.markdown("**马德里**")
     st.write("- **Tarjeta Multi**：地铁站自动售票机买，卡 €2.50")
     st.write("- **Metrobús 10次票**：€12，地铁+公交")
-    st.write("- **青年卡（<26岁）**：€20/月，全区域无限坐")
-    st.write("- 预约：tarjetatransportepublico.crtm.es")
+    st.write("- **青年卡（<26岁）**：€10/月，全区域无限坐")
     
-    st.markdown("**巴塞罗那**")
-    st.write("- **T-Jove（<25岁）**：€40/3个月，一区无限次")
-    st.write("- **T-Casual**：€11.35/10次")
-    st.write("- 购买：地铁站自动售票机")
+    st.markdown("**🔗 官网链接**")
+    st.markdown("""
+    - [CRTM 马德里交通官网](https://www.crtm.es)
+    - [青年卡在线申请](https://tarjetatransportepublico.crtm.es)
+    - [TMB 巴塞罗那交通官网](https://www.tmb.cat)
+    """)
     
-    st.info("💡 26岁以下，一定要办青年卡，一个月20欧随便坐。")
+    st.markdown("**🎫 充值步骤（地铁站自动售票机）**")
+    st.markdown("""
+    1. 点屏幕上的 **「Recargar」**（充值）
+    2. 把交通卡插入机器卡槽
+    3. 选择 **「Abono Joven」**（青年卡，10欧）或 **「10 viajes」**（10次票，12欧）
+    4. 用现金或银行卡付款
+    5. 取回卡片，完成
+    """)
+    
+    st.info("💡 26岁以下，一定要办青年卡，一个月10欧随便坐。")
 
 
 # ===== 第三列：银行 + 医保 =====
@@ -97,6 +122,15 @@ with col3:
     | CaixaBank | 实体 | 网点最多 |
     | N26 | 数字 | 易开户，⚠️续居留不认 |
     """)
+    
+    st.markdown("**🔗 银行官网**")
+    st.markdown("""
+    - [Santander](https://www.santander.es)
+    - [BBVA](https://www.bbva.es)
+    - [CaixaBank](https://www.caixabank.es)
+    - [N26](https://n26.com)
+    """)
+    
     st.write("**开户需要：** 护照 + NIE + 住家证明 + 注册单")
     st.warning("⚠️ N26/Revolut 续居留可能被拒，建议办实体银行。")
     
@@ -108,6 +142,14 @@ with col3:
     | Sanitas | 偏高 | 服务好 |
     | Asisa | 性价比高 | 留学生常用 |
     """)
+    
+    st.markdown("**🔗 医保官网**")
+    st.markdown("""
+    - [Adeslas](https://www.adeslas.es)
+    - [Sanitas](https://www.sanitas.es)
+    - [Asisa](https://www.asisa.es)
+    """)
+    
     st.info("💡 续居留必须提供医保，建议提前办。")
 
 
