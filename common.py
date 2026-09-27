@@ -17,3 +17,16 @@ else:
 # 判断是否登录
 def is_user_logged_in():
     return bool(user_email)
+
+import streamlit as st
+
+def remember_page():
+    if "last_page" not in st.session_state:
+        st.session_state["last_page"] = "home.py"
+    current = st.session_state.get("current_page", "home.py")
+    if current != st.session_state["last_page"]:
+        st.session_state["last_page"] = current
+
+def go_back():
+    if st.button("⬅️ 返回上一步"):
+        st.switch_page(st.session_state.get("last_page", "home.py"))

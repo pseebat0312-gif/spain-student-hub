@@ -8,4 +8,6 @@ deep-translator
 pytz
 streamlit-calendar
 bcrypt
+feedparser
+openai
 
