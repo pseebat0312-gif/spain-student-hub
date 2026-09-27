@@ -93,7 +93,10 @@ with st.sidebar:
                             st.error("❌ 邮箱或密码错误")
     else:
         # 已登录：显示用户信息
-        user_email = st.user.email if is_user_logged_in() else st.session_state["qq_user_email"]
+        if st.user.is_logged_in:
+            user_email = st.user.email
+        else:
+            user_email = st.session_state.get("qq_user_email", "")
         
         profile = safe_execute(
             supabase.table("user_profiles").select("nickname", "avatar_emoji").eq("email", user_email)

@@ -21,7 +21,21 @@ def get_supabase():
 
 supabase = get_supabase()
 
+import streamlit as st
+from supabase import create_client
+from crypto_utils import hash_password, verify_password
 
+# 判断是 Google 登录还是 QQ 登录
+if st.user.is_logged_in:
+    user_email = st.user.email
+else:
+    user_email = st.session_state.get("qq_user_email", "")
+
+# 如果两种都没登录，直接停
+if not user_email:
+    st.warning("请先登录。")
+    st.stop()
+    
 
 # ---------- 个人资料 ----------
 st.divider()
