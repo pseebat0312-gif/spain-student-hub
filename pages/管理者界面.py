@@ -13,16 +13,14 @@ else:
 if not user_email:
     st.warning("请先登录。")
     st.stop()
-    
+
 supabase = create_client(st.secrets["supabase"]["url"], st.secrets["supabase"]["key"])
 
 ADMIN_EMAIL = "pseebat0312@gmail.com"
 
-if not st.user.is_logged_in:
-    st.warning("请先登录。")
-    st.stop()
 
-if st.user.email != ADMIN_EMAIL:
+
+if user_email != ADMIN_EMAIL:
     st.error("抱歉，你没有权限访问此页面。")
     st.stop()
 
