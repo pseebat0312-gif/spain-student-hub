@@ -20,6 +20,8 @@ def is_user_logged_in():
     return st.user.is_logged_in or ("qq_user_email" in st.session_state)
 
 st.set_page_config(page_title="西班牙留学生工具站", page_icon="🇪🇸")
+page_title="西班牙留学生工具站",
+page_icon="🇪🇸",
 st.set_page_config(
     page_title="西班牙留学生工具站",
     page_icon="🇪🇸",
