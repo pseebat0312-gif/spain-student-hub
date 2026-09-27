@@ -12,61 +12,17 @@ st.set_page_config(page_title="西班牙留学生工具站", page_icon="🇪🇸
 st.title("🇪🇸 西班牙留学生一站式工具站")
 st.write("¡Bienvenidos! 请从左侧选择你要用的工具。")
 
-# ===== 落地第一周海报 =====
-st.markdown("""
-<style>
-    .landing-banner {
-        background: linear-gradient(135deg, #1a4d2e, #4a7c59);
-        border-radius: 16px;
-        padding: 24px;
-        margin-bottom: 20px;
-        border: 2px solid #a0d8b3;
-        box-shadow: 0 8px 20px rgba(74, 124, 89, 0.4);
-    }
-    .landing-banner h2 {
-        color: #ffffff;
-        font-size: 22px;
-        margin-bottom: 8px;
-    }
-    .landing-banner p {
-        color: #d0e8d8;
-        font-size: 14px;
-        margin-bottom: 0;
-    }
-</style>
-<div class="landing-banner">
-    <h2>🇪🇸 刚到西班牙？别慌，跟着走就行</h2>
-    <p>第一周该办什么、去哪办、怎么不踩坑——我们一步一步带你搞定。</p >
-</div>
-""", unsafe_allow_html=True)
+# ===== 首页海报 =====
+st.markdown("### 👋 刚到西班牙？先看看这个")
 
-with st.expander("📖 点这里展开：落地第一周全攻略", expanded=True):
-    st.write("欢迎来到西班牙！下面是第一周最该做的事，按顺序来：")
+image_url = "https://postimg.cc/tYWmC56S"
 
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown("**Day 1 · 落地当天**")
-        st.checkbox("买手机卡（Vodafone / Orange / Yoigo）", key="day1_1")
-        st.checkbox("办交通卡（马德里：Multi Card）", key="day1_2")
-        st.checkbox("下载 Google Maps + Cabify", key="day1_3")
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.image(image_url, use_container_width=True)
+    if st.button("🚀 进入落地第一周攻略", type="primary", use_container_width=True):
+        st.switch_page("pages/_落地第一周.py")
 
-        st.markdown("**Day 2 · 学校注册**")
-        st.checkbox("去学校秘书处注册", key="day2_1")
-        st.checkbox("拿学生卡", key="day2_2")
-        st.checkbox("激活 Campus Virtual 账号", key="day2_3")
-    with col2:
-        st.markdown("**Day 3 · 住家证明**")
-        st.checkbox("和房东要租房合同", key="day3_1")
-        st.checkbox("预约市政府（Ayuntamiento）", key="day3_2")
-        st.checkbox("带护照 + 合同去办理", key="day3_3")
-
-        st.markdown("**Day 4-5 · 银行 + 医保**")
-        st.checkbox("开银行账户（Santander / BBVA）", key="day4_1")
-        st.checkbox("办私立医保（Adeslas / Sanitas）", key="day4_2")
-        st.checkbox("申请 NIE（如果需要）", key="day4_3")
-
-    st.divider()
-    st.caption("💡 勾选后进度会保存在你的浏览器里。完成一项就打一个勾。")
 
 
 @st.cache_resource
