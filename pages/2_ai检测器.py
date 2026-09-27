@@ -7,6 +7,7 @@ import sys
 sys.path.append("..")
 from styles import apply_sidebar_style
 apply_sidebar_style()
+
 # 统一获取当前登录用户的邮箱
 if st.user.is_logged_in:
     user_email = st.user.email
@@ -16,6 +17,7 @@ else:
 if not user_email:
     st.warning("请先登录。")
     st.stop()
+
 st.page_link("home.py", label="⬅️ 返回首页", icon="🏠")
 
 # 检查用户是否登录

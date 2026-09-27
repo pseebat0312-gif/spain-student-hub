@@ -190,7 +190,7 @@ st.progress(progress)
 st.divider()
 st.subheader("📂 我的专属空间")
 if is_user_logged_in():
-    st.write(f"欢迎回来，{st.user.email}")
+    st.write(f"欢迎回来，{user_email}")
 else:
     st.info("🔒 登录后可以管理你的专属空间")
 

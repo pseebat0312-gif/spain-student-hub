@@ -91,7 +91,7 @@ if items.data:
                     .execute()
                 st.session_state[f"detail_{item['id']}"] = True
                 st.rerun()
-            if item["user_email"] == st.user.email:
+            if item["user_email"] == user_email:
                 if st.button("🗑️", key=f"del_item_{item['id']}"):
                     supabase.table("marketplace")\
                         .delete()\
