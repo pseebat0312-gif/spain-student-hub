@@ -64,8 +64,8 @@ if shops:
             "ScatterplotLayer",
             data=df,
             get_position="[lon, lat]",
-            get_color="[74, 124, 89, 200]",
-            get_radius=500,
+            get_color="[231, 76, 60, 255]",
+            get_radius=8000,
             pickable=True,
             auto_highlight=True,
         )
