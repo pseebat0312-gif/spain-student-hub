@@ -47,7 +47,14 @@ with st.sidebar:
             st.caption("🛡️ 管理员")
         if st.button("退出登录"):
             st.logout()
-
+            
+if st.user.is_logged_in:
+    # 记录本次登录（用 session_state 防止每次刷新都写一条）
+    if "logged_in_once" not in st.session_state:
+        supabase.table("login_logs").insert({
+            "user_email": st.user.email
+        }).execute()
+        st.session_state["logged_in_once"] = True
 # ===== 专属空间 =====
 st.divider()
 st.subheader("📂 我的专属空间")
