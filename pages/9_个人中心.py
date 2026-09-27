@@ -4,6 +4,16 @@ from supabase import create_client
 from styles import apply_sidebar_style
 apply_sidebar_style()
 
+# 统一获取当前登录用户的邮箱
+if st.user.is_logged_in:
+    user_email = st.user.email
+else:
+    user_email = st.session_state.get("qq_user_email", "")
+
+if not user_email:
+    st.warning("请先登录。")
+    st.stop()
+
 st.page_link("home.py", label="⬅️ 返回首页", icon="🏠")
 
 def safe_execute(query, default=None):
@@ -24,6 +34,10 @@ supabase = get_supabase()
 import streamlit as st
 from supabase import create_client
 from crypto_utils import hash_password, verify_password
+
+# 从网址参数恢复 QQ 登录状态（防止刷新后丢失）
+if "user" in st.query_params and "qq_user_email" not in st.session_state:
+    st.session_state["qq_user_email"] = st.query_params["user"]
 
 # 判断是 Google 登录还是 QQ 登录
 if st.user.is_logged_in:
@@ -69,7 +83,7 @@ new_emoji = st.selectbox(
 if st.button("💾 保存资料"):
     safe_execute(
         supabase.table("user_profiles").upsert({
-            "email": st.user.email,
+            "email": user_email,
             "nickname": new_nickname,
             "avatar_emoji": new_emoji,
         })
@@ -88,10 +102,10 @@ if st.button("确认修改", key="change_pwd_btn"):
     if old_pwd and new_pwd:
         # 检查旧密码
         check = safe_execute(
-            supabase.table("app_users").select("*").eq("email", st.user.email).eq("password", old_pwd)
+            supabase.table("app_users").select("*").eq("email", user_email).eq("password", old_pwd)
         )
         if check:
-            supabase.table("app_users").update({"password": new_pwd}).eq("email", st.user.email).execute()
+            supabase.table("app_users").update({"password": new_pwd}).eq("email", user_email).execute()
             st.success("✅ 密码已修改")
         else:
             st.error("❌ 旧密码错误")

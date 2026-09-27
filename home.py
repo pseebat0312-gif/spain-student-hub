@@ -42,8 +42,8 @@ def safe_execute(query, default=None):
     except Exception as e:
         st.error(f"数据库请求失败：{e}")
         return default if default is not None else []
-
-# ===== 恢复登录状态 =====
+    
+# 从网址参数恢复 QQ 登录状态（防止刷新后丢失）
 if "user" in st.query_params and "qq_user_email" not in st.session_state:
     st.session_state["qq_user_email"] = st.query_params["user"]
 
@@ -137,7 +137,7 @@ if is_user_logged_in():
     # 记录本次登录（用 session_state 防止每次刷新都写一条）
     if "logged_in_once" not in st.session_state:
         supabase.table("login_logs").insert({
-            "user_email": st.user.email
+            "user_email": user_email
         }).execute()
         st.session_state["logged_in_once"] = True
 

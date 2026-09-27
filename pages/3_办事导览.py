@@ -3,7 +3,15 @@ import sys
 sys.path.append("..")
 from styles import apply_sidebar_style
 apply_sidebar_style()
+# 统一获取当前登录用户的邮箱
+if st.user.is_logged_in:
+    user_email = st.user.email
+else:
+    user_email = st.session_state.get("qq_user_email", "")
 
+if not user_email:
+    st.warning("请先登录。")
+    st.stop()
 st.page_link("home.py", label="⬅️ 返回首页", icon="🏠")
 
 st.set_page_config(page_title="西班牙办事快速导览", page_icon="🏛️")

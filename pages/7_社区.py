@@ -6,6 +6,15 @@ apply_sidebar_style()
 import streamlit as st
 from supabase import create_client
 
+# 统一获取当前登录用户的邮箱
+if st.user.is_logged_in:
+    user_email = st.user.email
+else:
+    user_email = st.session_state.get("qq_user_email", "")
+
+if not user_email:
+    st.warning("请先登录。")
+    st.stop()
 
 st.page_link("home.py", label="⬅️ 返回首页", icon="🏠")
 
@@ -16,7 +25,7 @@ st.write("分享你的经验、踩过的坑，或者向其他人求助。")
 
 supabase = create_client(st.secrets["supabase"]["url"], st.secrets["supabase"]["key"])
 
-if not st.user.is_logged_in:
+if not user_email:
     st.warning("请先在首页登录，才能发帖和回复。")
     st.stop()
 
@@ -31,7 +40,7 @@ with st.expander("➕ 发布新帖子", expanded=False):
             st.warning("标题和内容不能为空。")
         else:
             supabase.table("posts").insert({
-                "user_email": st.user.email,
+                "user_email": user_email,
                 "title": title,
                 "content": content,
                 "category": category
@@ -81,7 +90,7 @@ if posts_data:
                 if reply_text.strip():
                     supabase.table("replies").insert({
                         "post_id": post["id"],
-                        "user_email": st.user.email,
+                        "user_email": user_email,
                         "content": reply_text
                     }).execute()
                     st.rerun()
