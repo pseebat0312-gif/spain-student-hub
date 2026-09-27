@@ -5,6 +5,8 @@ import pytz
 from supabase import create_client
 from streamlit_calendar import calendar as st_calendar
 from styles import apply_sidebar_style
+import smtplib
+from email.mime.text import MIMEText
 
 apply_sidebar_style()
 
@@ -37,13 +39,54 @@ def safe_execute(query, default=None):
         st.error(f"数据库请求失败：{e}")
         return default if default is not None else []
 
-# ===== 侧边栏 =====
+# ===== 侧边栏登录区 =====
 with st.sidebar:
     if not st.user.is_logged_in:
         st.info("💡 登录后可使用全部功能")
-        if st.button("使用 Google 登录"):
-            st.login()
+        
+        # 两个并排的登录方式
+        col_a, col_b = st.columns(2)
+        with col_a:
+            if st.button("🔵 Google 登录", use_container_width=True):
+                st.login()
+        with col_b:
+            st.session_state["show_qq_login"] = True
+        
+        # QQ 邮箱登录表单
+        if st.session_state.get("show_qq_login", False):
+            with st.expander("📧 QQ 邮箱登录", expanded=True):
+                qq_email = st.text_input("邮箱：", key="qq_email_input")
+                qq_password = st.text_input("密码：", type="password", key="qq_pwd_input")
+                
+                if st.button("登录", key="qq_login_btn", use_container_width=True):
+                    user = safe_execute(
+                        supabase.table("app_users").select("*").eq("email", qq_email).eq("password", qq_password)
+                    )
+                    if user:
+                        st.session_state["qq_user_email"] = qq_email
+                        st.success("✅ 登录成功")
+                        st.rerun()
+                    else:
+                        st.error("❌ 邮箱或密码错误")
+                
+                st.divider()
+                st.caption("没有账号？注册一个：")
+                new_email = st.text_input("注册邮箱：", key="reg_email")
+                new_pwd = st.text_input("设置密码：", type="password", key="reg_pwd")
+                if st.button("注册", key="reg_btn", use_container_width=True):
+                    if new_email and new_pwd:
+                        try:
+                            supabase.table("app_users").insert({
+                                "email": new_email,
+                                "password": new_pwd
+                            }).execute()
+                            st.success("✅ 注册成功，请返回登录")
+                        except Exception as e:
+                            st.error(f"注册失败（邮箱可能已被占用）：{e}")
+                    else:
+                        st.warning("邮箱和密码都不能为空")
     else:
+        # 已登录：显示用户信息
         profile = safe_execute(
             supabase.table("user_profiles").select("nickname", "avatar_emoji").eq("email", st.user.email)
         )
@@ -53,6 +96,7 @@ with st.sidebar:
         else:
             display_name = st.user.name
             display_emoji = "👤"
+        
         st.page_link("pages/9_个人中心.py", label=f"{display_emoji} {display_name}")
         if st.user.email == ADMIN_EMAIL:
             st.caption("🛡️ 管理员")

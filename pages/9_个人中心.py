@@ -64,6 +64,26 @@ if st.button("💾 保存资料"):
     st.rerun()
 
 
+st.divider()
+st.subheader("🔑 修改密码")
+
+old_pwd = st.text_input("旧密码：", type="password", key="old_pwd")
+new_pwd = st.text_input("新密码：", type="password", key="new_pwd")
+
+if st.button("确认修改", key="change_pwd_btn"):
+    if old_pwd and new_pwd:
+        # 检查旧密码
+        check = safe_execute(
+            supabase.table("app_users").select("*").eq("email", st.user.email).eq("password", old_pwd)
+        )
+        if check:
+            supabase.table("app_users").update({"password": new_pwd}).eq("email", st.user.email).execute()
+            st.success("✅ 密码已修改")
+        else:
+            st.error("❌ 旧密码错误")
+    else:
+        st.warning("请填写完整")
+
 # ---------- 会员状态 ----------
 st.divider()
 st.subheader("💎 会员状态")
