@@ -1,0 +1,42 @@
+import sys
+sys.path.append("..")
+from supabase import create_client
+from styles import apply_sidebar_style
+apply_sidebar_style()
+
+import streamlit as st
+# 统一获取当前登录用户的邮箱
+if st.user.is_logged_in:
+    user_email = st.user.email
+else:
+    user_email = st.session_state.get("qq_user_email", "")
+
+if not user_email:
+    st.warning("请先登录。")
+    st.stop()
+
+st.set_page_config(page_title="每日更新", page_icon="📰")
+st.page_link("home.py", label="⬅️ 返回首页", icon="🏠")
+
+st.title("📰 今日更新")
+st.write("每天凌晨自动更新，给你最新的西班牙留学生资讯。")
+
+supabase = create_client(st.secrets["supabase"]["url"], st.secrets["supabase"]["key"])
+
+digest = supabase.table("daily_digest")\
+    .select("*")\
+    .order("created_at", desc=True)\
+    .limit(20)\
+    .execute()
+
+if digest.data:
+    for d in digest.data:
+        st.markdown(f"### {d['title']}")
+        st.write(d['summary'])
+        if d.get('url'):
+            st.markdown(f"[阅读原文 →]({d['url']})")
+        if d.get('source'):
+            st.caption(f"来源：{d['source']}")
+        st.divider()
+else:
+    st.info("今日暂无更新，稍后再来看看。")

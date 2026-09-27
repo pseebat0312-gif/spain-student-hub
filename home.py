@@ -18,6 +18,20 @@ st.set_page_config(page_title="西班牙留学生工具站", page_icon="🇪🇸
 st.title("🇪🇸 西班牙留学生一站式工具站")
 st.write("¡Bienvenidos! 请从左侧选择你要用的工具。")
 
+st.divider()
+
+# 每日更新入口
+st.markdown("""
+<div style="background: linear-gradient(135deg, #1a4d2e, #4a7c59); border-radius: 16px; padding: 24px; text-align: center; margin: 20px 0;">
+    <h2 style="color: #ffffff; margin: 0;">📰 今日更新</h2>
+    <p style="color: #d0e8d8; margin: 8px 0 0 0;">每天凌晨自动为你收集西班牙留学生最新资讯</p >
+</div>
+""", unsafe_allow_html=True)
+
+if st.button("👉 点击查看今日更新", use_container_width=True):
+    st.switch_page("pages/_每日更新.py")
+
+    
 # ===== 首页海报 =====
 st.markdown("### 👋 刚到西班牙？先看看这个")
 
