@@ -83,11 +83,11 @@ if shops:
         }
 
         st.pydeck_chart(pdk.Deck(
-            layers=[layer],
-            initial_view_state=view_state,
-            tooltip=tooltip,
-            map_style="mapbox://styles/mapbox/streets-v10"
-        ))
+    layers=[layer],
+    initial_view_state=view_state,
+    tooltip=tooltip,
+    map_style=f"mapbox://styles/mapbox/streets-v12?access_token={st.secrets['mapbox']['token']}"
+))
     else:
         st.info("还没有人添加坐标，去发布第一条吧。")
 else:
