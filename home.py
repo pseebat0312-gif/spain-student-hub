@@ -63,64 +63,61 @@ if st.user.is_logged_in:
 else:
     st.info("🔒 登录后可以管理你的专属空间")
 
-# ===== 功能卡片导航 =====
+# ===== 功能导航：词云气泡 =====
 st.divider()
-st.subheader("🚀 快速导航")
+st.subheader("🚀 功能导航")
 
 st.markdown("""
 <style>
-    .card-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    .bubble-cloud {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         gap: 12px;
-        margin-top: 15px;
+        padding: 20px 0;
     }
-    .card {
-        background: #1a1a2e;
-        border: 2px solid #4a7c59;
-        border-radius: 12px;
-        padding: 14px;
-        text-align: center;
+    .bubble {
+        display: inline-block;
+        padding: 14px 22px;
+        border-radius: 50px;
+        color: white;
+        font-weight: bold;
+        font-size: 15px;
+        cursor: pointer;
         transition: all 0.3s ease;
+        text-decoration: none;
+        border: 2px solid rgba(255,255,255,0.1);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
-    .card:hover {
+    .bubble:hover {
+        transform: translateY(-4px) scale(1.08);
+        box-shadow: 0 8px 20px rgba(74, 124, 89, 0.6);
         border-color: #a0d8b3;
-        transform: translateY(-3px);
-        box-shadow: 0 6px 15px rgba(74, 124, 89, 0.4);
     }
-    .card-icon { font-size: 28px; margin-bottom: 6px; }
-    .card-title { font-size: 14px; font-weight: bold; color: #ffffff; }
+    .c1 { background: #2f5d3a; }
+    .c2 { background: #4a7c59; }
+    .c3 { background: #6b9e7a; }
+    .c4 { background: #1a4d2e; }
+    .c5 { background: #3d6b4a; }
+    .c6 { background: #5a8f6b; }
 </style>
 """, unsafe_allow_html=True)
 
-col1, col2, col3 = st.columns(3)
-with col1:
-    st.markdown('<div class="card"><div class="card-icon">🔍</div><div class="card-title">AI 检测器</div></div>', unsafe_allow_html=True)
-    if st.button("进入", key="nav_ai", use_container_width=True):
-        st.switch_page("pages/2_ai检测器.py")
-with col2:
-    st.markdown('<div class="card"><div class="card-icon">🌐</div><div class="card-title">翻译器</div></div>', unsafe_allow_html=True)
-    if st.button("进入", key="nav_trans", use_container_width=True):
-        st.switch_page("pages/简易翻译器.py")
-with col3:
-    st.markdown('<div class="card"><div class="card-icon">🏛️</div><div class="card-title">学校导览</div></div>', unsafe_allow_html=True)
-    if st.button("进入", key="nav_school", use_container_width=True):
-        st.switch_page("pages/1_学校导览.py")
+st.markdown("""
+<div class="bubble-cloud">
+    <a href=" " class="bubble c1">🏛️ 学校导览</a >
+    <a href="/2_ai检测器" class="bubble c2">🔍 AI 检测器</a >
+    <a href="/3_办事导览" class="bubble c3">📋 办事导览</a >
+    <a href="/4_简易翻译器" class="bubble c4">🌐 翻译器</a >
+    <a href="/5_日常生活导览" class="bubble c5">🎭 日常生活</a >
+    <a href="/6_留子二手街区" class="bubble c6">🛒 二手街区</a >
+    <a href="/7_社区" class="bubble c1">💬 社区</a >
+    <a href="/8_学习区" class="bubble c2">📚 学习区</a >
+    <a href="/9_个人中心" class="bubble c3">👤 个人中心</a >
+    <a href="/留言板" class="bubble c4">✍️ 留言板</a >
+</div>
+""", unsafe_allow_html=True)
 
-col4, col5, col6 = st.columns(3)
-with col4:
-    st.markdown('<div class="card"><div class="card-icon">💬</div><div class="card-title">社区</div></div>', unsafe_allow_html=True)
-    if st.button("进入", key="nav_community", use_container_width=True):
-        st.switch_page("pages/7_社区.py")
-with col5:
-    st.markdown('<div class="card"><div class="card-icon">🛒</div><div class="card-title">二手市场</div></div>', unsafe_allow_html=True)
-    if st.button("进入", key="nav_market", use_container_width=True):
-        st.switch_page("pages/二手市场.py")
-with col6:
-    st.markdown('<div class="card"><div class="card-icon">✍️</div><div class="card-title">留言板</div></div>', unsafe_allow_html=True)
-    if st.button("进入", key="nav_message", use_container_width=True):
-        st.switch_page("pages/留言板.py")
-        
 # ===== 时钟 =====
 st.divider()
 st.subheader("🕐 现在时间")
