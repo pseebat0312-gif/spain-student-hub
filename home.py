@@ -20,7 +20,12 @@ def is_user_logged_in():
     return st.user.is_logged_in or ("qq_user_email" in st.session_state)
 
 st.set_page_config(page_title="西班牙留学生工具站", page_icon="🇪🇸")
-st.title("🇪🇸 西班牙留学生一站式工具站")
+st.set_page_config(
+    page_title="西班牙留学生工具站",
+    page_icon="🇪🇸",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 st.write("¡Bienvenidos! 请从左侧选择你要用的工具。")
 
 st.markdown("""
