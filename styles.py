@@ -7,38 +7,43 @@ def apply_sidebar_style():
         .stApp, [data-testid="stAppViewContainer"] {
             background: #000000 !important;
         }
-        
-        /* ===== 全站字体：衬线体（serif） ===== */
-        * {
-            font-family: 'Georgia', 'Times New Roman', serif !important;
-        }
-        
+
         /* ===== 正文文字：白色 ===== */
         .stApp, .stApp p, .stApp div, .stApp span, .stApp label {
             color: #ffffff !important;
         }
-        
-        /* ===== 标题：金色衬线 ===== */
+
+        /* ===== 标题：浅绿 ===== */
         h1, h2, h3 {
-            color: #f5e6a3 !important;
-            font-family: 'Georgia', 'Times New Roman', serif !important;
-            font-weight: 700 !important;
+            color: #a0d8b3 !important;
         }
-        
-        /* ===== 侧边栏 ===== */
+
+        /* ===== 侧边栏：深绿背景 ===== */
         [data-testid="stSidebar"] {
-            background-color: #0a0a0a !important;
-            border-right: 2px solid #4a7c59 !important;
+            background-color: #1a1a2e !important;
+            border-right: 3px solid #4a7c59 !important;
         }
         
-        
-        /* ===== 折叠框 ===== */
-        div[data-testid="stExpander"] {
-            border-radius: 12px !important;
+        /* ===== 侧边栏链接：白色、悬停滑动 ===== */
+        [data-testid="stSidebar"] a {
+            color: #ffffff !important;
+            font-weight: bold !important;
+            font-size: 16px !important;
             border: 1px solid #4a7c59 !important;
-            background-color: #111111 !important;
+            border-radius: 10px !important;
+            padding: 8px 12px !important;
+            margin-bottom: 5px !important;
+            display: block !important;
+            text-decoration: none !important;
+            transition: all 0.3s ease !important;
         }
-        /* ===== 所有按钮：圆润、有阴影、悬停放大 ===== */
+        [data-testid="stSidebar"] a:hover {
+            background-color: #4a7c59 !important;
+            color: #ffffff !important;
+            transform: translateX(5px) !important;
+        }
+
+        /* ===== 所有按钮：圆润、悬停放大 ===== */
         div[data-testid="stButton"] > button {
             border-radius: 12px !important;
             box-shadow: 0 4px 12px rgba(74, 124, 89, 0.2) !important;
@@ -54,26 +59,19 @@ def apply_sidebar_style():
             background-color: #5a8f6b !important;
         }
 
-        
+        /* ===== 折叠框 ===== */
+        div[data-testid="stExpander"] {
+            border-radius: 12px !important;
+            border: 1px solid #4a7c59 !important;
+            background-color: #111111 !important;
+        }
+
         /* ===== 输入框 ===== */
         div[data-testid="stTextInput"] input {
             border-radius: 10px !important;
-            border: 2px solid #c8e6d0 !important;
-            transition: all 0.3s ease !important;
-        }
-        div[data-testid="stTextInput"] input:focus {
-            border-color: #4a7c59 !important;
-            box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.15) !important;
-        }
-
-        /* ===== 图片：圆角 ===== */
-        img {
-            border-radius: 12px !important;
-        }
-
-        /* ===== 提示框 ===== */
-        div[data-testid="stAlert"] {
-            border-radius: 10px !important;
+            border: 2px solid #4a7c59 !important;
+            background-color: #1a1a1a !important;
+            color: #ffffff !important;
         }
     </style>
     """, unsafe_allow_html=True)
