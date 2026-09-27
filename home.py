@@ -55,7 +55,7 @@ if st.user.is_logged_in:
             "user_email": st.user.email
         }).execute()
         st.session_state["logged_in_once"] = True
-        
+
 # ===== 时钟 =====
 st.divider()
 st.subheader("🕐 现在时间")
@@ -109,63 +109,70 @@ if st.user.is_logged_in:
 else:
     st.info("🔒 登录后可以管理你的专属空间")
 
-# ===== 功能导航：气泡云 =====
+# ===== 功能导航 =====
 st.divider()
 st.subheader("🚀 功能导航")
 
 st.markdown("""
 <style>
-    .bubble-cloud {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        gap: 8px;
-        padding: 15px 5px;
-        min-height: 180px;
-    }
-    .bubble {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
+    /* 把按钮做成圆形气泡 */
+    div[data-testid="stButton"] > button {
+        border-radius: 50% !important;
+        width: 100px !important;
+        height: 100px !important;
+        padding: 8px !important;
+        white-space: normal !important;
+        font-size: 12px !important;
+        font-weight: bold !important;
         color: #ffffff !important;
-        font-weight: bold;
-        text-decoration: none !important;
-        border-radius: 50%;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        border: 2px solid rgba(255,255,255,0.15);
-        padding: 8px;
-        line-height: 1.1;
+        background-color: #4a7c59 !important;
+        border: 2px solid #a0d8b3 !important;
+        transition: all 0.25s ease !important;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+        line-height: 1.2 !important;
     }
-    .bubble:hover {
-        transform: scale(1.1);
-        border-color: #a0d8b3;
+    div[data-testid="stButton"] > button:hover {
+        transform: scale(1.1) !important;
+        background-color: #6b9e7a !important;
+        border-color: #ffffff !important;
     }
-    .b1 { background: #2f5d3a; width: 85px; height: 85px; font-size: 12px; }
-    .b2 { background: #4a7c59; width: 75px; height: 75px; font-size: 11px; }
-    .b3 { background: #6b9e7a; width: 70px; height: 70px; font-size: 11px; }
-    .b4 { background: #1a4d2e; width: 80px; height: 80px; font-size: 12px; }
-    .b5 { background: #3d6b4a; width: 65px; height: 65px; font-size: 10px; }
-    .b6 { background: #5a8f6b; width: 78px; height: 78px; font-size: 11px; }
-    .b7 { background: #264d33; width: 60px; height: 60px; font-size: 10px; }
 </style>
-
-<div class="bubble-cloud">
-    <a href=" " target="_self" class="bubble b1">🏛️<br>学校导览</a >
-    <a href="/2_ai检测器" target="_self" class="bubble b2">🔍<br>AI 检测器</a >
-    <a href="/3_办事导览" target="_self" class="bubble b3">📋<br>办事导览</a >
-    <a href="/4_简易翻译器" target="_self" class="bubble b4">🌐<br>翻译器</a >
-    <a href="/5_日常生活导览" target="_self" class="bubble b5">🎭<br>日常生活</a >
-    <a href="/6_留子二手街区" target="_self" class="bubble b6">🛒<br>二手街区</a >
-    <a href="/7_社区" target="_self" class="bubble b7">💬<br>社区</a >
-    <a href="/8_学习区" target="_self" class="bubble b1">📚<br>学习区</a >
-    <a href="/9_个人中心" target="_self" class="bubble b5">👤<br>个人中心</a >
-    <a href="/留言板" target="_self" class="bubble b3">✍️<br>留言板</a >
-</div>
 """, unsafe_allow_html=True)
 
+# 用列来摆放，5 列，2 行
+row1 = st.columns(5)
+with row1[0]:
+    if st.button("🏛️\n学校导览", key="nav_school"):
+        st.switch_page("pages/1_学校导览.py")
+with row1[1]:
+    if st.button("🔍\nAI 检测器", key="nav_ai"):
+        st.switch_page("pages/2_ai检测器.py")
+with row1[2]:
+    if st.button("📋\n办事导览", key="nav_admin"):
+        st.switch_page("pages/3_办事导览.py")
+with row1[3]:
+    if st.button("🌐\n翻译器", key="nav_trans"):
+        st.switch_page("pages/4_简易翻译器.py")
+with row1[4]:
+    if st.button("🎭\n日常生活", key="nav_daily"):
+        st.switch_page("pages/5_日常生活导览.py")
+
+row2 = st.columns(5)
+with row2[0]:
+    if st.button("🛒\n二手街区", key="nav_market"):
+        st.switch_page("pages/6_留子二手街区.py")
+with row2[1]:
+    if st.button("💬\n社区", key="nav_community"):
+        st.switch_page("pages/7_社区.py")
+with row2[2]:
+    if st.button("📚\n学习区", key="nav_study"):
+        st.switch_page("pages/8_学习区.py")
+with row2[3]:
+    if st.button("👤\n个人中心", key="nav_profile"):
+        st.switch_page("pages/9_个人中心.py")
+with row2[4]:
+    if st.button("✍️\n留言板", key="nav_message"):
+        st.switch_page("pages/留言板.py")
 
 
 
