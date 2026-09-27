@@ -4,6 +4,16 @@ from supabase import create_client
 st.set_page_config(page_title="管理后台", page_icon="🛠️")
 st.title("🛠️ 管理后台")
 
+# 统一获取当前登录用户的邮箱
+if st.user.is_logged_in:
+    user_email = st.user.email
+else:
+    user_email = st.session_state.get("qq_user_email", "")
+
+if not user_email:
+    st.warning("请先登录。")
+    st.stop()
+    
 supabase = create_client(st.secrets["supabase"]["url"], st.secrets["supabase"]["key"])
 
 ADMIN_EMAIL = "pseebat0312@gmail.com"
