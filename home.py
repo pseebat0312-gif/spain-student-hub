@@ -15,7 +15,7 @@ st.write("¡Bienvenidos! 请从左侧选择你要用的工具。")
 # ===== 首页海报 =====
 st.markdown("### 👋 刚到西班牙？先看看这个")
 
-image_url = "https://postimg.cc/tYWmC56S"
+image_url = "https://i.postimg.cc/CLQy7rxg/2.jpg"
 
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
