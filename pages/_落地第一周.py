@@ -2,9 +2,8 @@ import sys
 sys.path.append("..")
 from styles import apply_sidebar_style
 apply_sidebar_style()
-sys.path.append("..")
-from styles import apply_sidebar_style
-apply_sidebar_style()
+
+
 import sys
 sys.path.append("..")
 from common import supabase, user_email, is_user_logged_in
