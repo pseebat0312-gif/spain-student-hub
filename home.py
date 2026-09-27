@@ -206,7 +206,7 @@ if is_user_logged_in():
     countdowns = safe_execute(
         supabase.table("countdowns")
         .select("*")
-        .eq("user_email", st.user.email)
+        .eq("user_email", user_email)
         .order("event_date", desc=False)
     )
     

@@ -20,10 +20,7 @@ if not user_email:
 
 st.page_link("home.py", label="⬅️ 返回首页", icon="🏠")
 
-# 检查用户是否登录
-if not st.user.is_logged_in:
-    st.warning("请先在首页登录，才能保存检测历史。")
-    st.stop()  # 停止往下执行
+
 
 
 import sys
