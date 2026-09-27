@@ -115,94 +115,98 @@ st.subheader("🚀 功能导航")
 
 st.markdown("""
 <style>
-    /* 圆形气泡按钮：大小不一，深绿浅绿交错 */
+    /* 让按钮变成圆形 */
     div[data-testid="stButton"] > button {
         border-radius: 50% !important;
-        white-space: normal !important;
+        white-space: pre-line !important;
         font-weight: bold !important;
         color: #ffffff !important;
-        border: 2px solid #a0d8b3 !important;
+        border: none !important;
         transition: all 0.3s ease !important;
-        box-shadow: 0 6px 14px rgba(0,0,0,0.4) !important;
-        line-height: 1.2 !important;
-        padding: 10px !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
+        padding: 5px !important;
+        line-height: 1.3 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
     div[data-testid="stButton"] > button:hover {
-        transform: scale(1.15) !important;
-        background-color: #a0d8b3 !important;
-        color: #1a1a2e !important;
-        border-color: #ffffff !important;
+        transform: scale(1.1) !important;
+        box-shadow: 0 8px 20px rgba(160, 216, 179, 0.8) !important;
     }
-    /* 大小和颜色错落 */
-    .bubble-lg button { width: 110px !important; height: 110px !important; font-size: 13px !important; background-color: #2f5d3a !important; }
-    .bubble-md button { width: 95px !important; height: 95px !important; font-size: 12px !important; background-color: #4a7c59 !important; }
-    .bubble-sm button { width: 80px !important; height: 80px !important; font-size: 11px !important; background-color: #6b9e7a !important; }
+    
+    /* 每个气泡：不同大小、不同深浅绿 */
+    .b1 button { width: 110px !important; height: 110px !important; font-size: 13px !important; background-color: #1a4d2e !important; }
+    .b2 button { width: 90px !important;  height: 90px !important;  font-size: 12px !important; background-color: #2f5d3a !important; }
+    .b3 button { width: 100px !important; height: 100px !important; font-size: 12px !important; background-color: #4a7c59 !important; }
+    .b4 button { width: 85px !important;  height: 85px !important;  font-size: 11px !important; background-color: #6b9e7a !important; }
+    .b5 button { width: 105px !important; height: 105px !important; font-size: 13px !important; background-color: #264d33 !important; }
+    .b6 button { width: 95px !important;  height: 95px !important;  font-size: 12px !important; background-color: #5a8f6b !important; }
+    .b7 button { width: 88px !important;  height: 88px !important;  font-size: 11px !important; background-color: #3d6b4a !important; }
+    .b8 button { width: 115px !important; height: 115px !important; font-size: 13px !important; background-color: #4a7c59 !important; }
+    .b9 button { width: 92px !important;  height: 92px !important;  font-size: 12px !important; background-color: #2f5d3a !important; }
+    .b10 button { width: 98px !important; height: 98px !important; font-size: 12px !important; background-color: #6b9e7a !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# 第一行：4 个（大中小交错）
+# ===== 第一排：4 个 =====
 r1 = st.columns(4)
 with r1[0]:
-    st.markdown('<div class="bubble-lg">', unsafe_allow_html=True)
+    st.markdown('<div class="b1">', unsafe_allow_html=True)
     if st.button("🏛️\n学校导览", key="n1"):
         st.switch_page("pages/1_学校导览.py")
     st.markdown('</div>', unsafe_allow_html=True)
 with r1[1]:
-    st.markdown('<div class="bubble-md">', unsafe_allow_html=True)
+    st.markdown('<div class="b4">', unsafe_allow_html=True)
     if st.button("🔍\nAI 检测器", key="n2"):
         st.switch_page("pages/2_ai检测器.py")
     st.markdown('</div>', unsafe_allow_html=True)
 with r1[2]:
-    st.markdown('<div class="bubble-sm">', unsafe_allow_html=True)
+    st.markdown('<div class="b3">', unsafe_allow_html=True)
     if st.button("📋\n办事导览", key="n3"):
         st.switch_page("pages/3_办事导览.py")
     st.markdown('</div>', unsafe_allow_html=True)
 with r1[3]:
-    st.markdown('<div class="bubble-lg">', unsafe_allow_html=True)
+    st.markdown('<div class="b2">', unsafe_allow_html=True)
     if st.button("🌐\n翻译器", key="n4"):
         st.switch_page("pages/4_简易翻译器.py")
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 第二行：3 个（往中间错开）
-r2 = st.columns([1, 1, 1, 1])
+# ===== 第二排：4 个 =====
+r2 = st.columns(4)
 with r2[0]:
-    st.write("")  # 空
-with r2[1]:
-    st.markdown('<div class="bubble-md">', unsafe_allow_html=True)
+    st.markdown('<div class="b6">', unsafe_allow_html=True)
     if st.button("🎭\n日常生活", key="n5"):
         st.switch_page("pages/5_日常生活导览.py")
     st.markdown('</div>', unsafe_allow_html=True)
-with r2[2]:
-    st.markdown('<div class="bubble-lg">', unsafe_allow_html=True)
+with r2[1]:
+    st.markdown('<div class="b5">', unsafe_allow_html=True)
     if st.button("🛒\n二手街区", key="n6"):
         st.switch_page("pages/6_留子二手街区.py")
     st.markdown('</div>', unsafe_allow_html=True)
-with r2[3]:
-    st.write("")  # 空
-
-# 第三行：4 个（大中小交错）
-r3 = st.columns(4)
-with r3[0]:
-    st.markdown('<div class="bubble-sm">', unsafe_allow_html=True)
+with r2[2]:
+    st.markdown('<div class="b7">', unsafe_allow_html=True)
     if st.button("💬\n社区", key="n7"):
         st.switch_page("pages/7_社区.py")
     st.markdown('</div>', unsafe_allow_html=True)
-with r3[1]:
-    st.markdown('<div class="bubble-lg">', unsafe_allow_html=True)
+with r2[3]:
+    st.markdown('<div class="b8">', unsafe_allow_html=True)
     if st.button("📚\n学习区", key="n8"):
         st.switch_page("pages/8_学习区.py")
     st.markdown('</div>', unsafe_allow_html=True)
-with r3[2]:
-    st.markdown('<div class="bubble-md">', unsafe_allow_html=True)
+
+# ===== 第三排：2 个（居中对齐） =====
+r3 = st.columns([1, 1, 1, 1])
+with r3[1]:
+    st.markdown('<div class="b9">', unsafe_allow_html=True)
     if st.button("👤\n个人中心", key="n9"):
         st.switch_page("pages/9_个人中心.py")
     st.markdown('</div>', unsafe_allow_html=True)
-with r3[3]:
-    st.markdown('<div class="bubble-sm">', unsafe_allow_html=True)
+with r3[2]:
+    st.markdown('<div class="b10">', unsafe_allow_html=True)
     if st.button("✍️\n留言板", key="n10"):
         st.switch_page("pages/留言板.py")
     st.markdown('</div>', unsafe_allow_html=True)
-
 
 
 # ===== 倒计时卡片 =====
