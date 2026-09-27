@@ -5,6 +5,8 @@ from styles import apply_sidebar_style
 apply_sidebar_style()
 
 from common import supabase, user_email, is_user_logged_in
+from streamlit_folium import st_folium
+import folium
 
 if not user_email:
     st.warning("请先登录。")
@@ -14,15 +16,8 @@ st.title("🗺️ 留学生探店地图")
 st.write("分享你发现的好店，看看大家都在哪里打卡。")
 
 # ===== 发布新店 =====
-from streamlit_folium import st_folium
-import folium
-
 st.subheader("➕ 推荐一家店")
 st.write("点击地图相应位置，分享探店体验~")
-
-# 用 folium 建地图，让用户点击选点
-from streamlit_folium import st_folium
-import folium
 
 m = folium.Map(location=[40.4168, -3.7038], zoom_start=6)
 clicked = st_folium(m, height=400, width=700, key="pick_map")
@@ -56,7 +51,7 @@ if clicked and clicked.get("last_clicked"):
             st.rerun()
 else:
     st.info("👆 请先在地图上点一下店铺的位置")
-    st.rerun()
+
 st.divider()
 
 # ===== 拉取所有店铺 =====
@@ -66,12 +61,14 @@ df = []
 for s in shops:
     if s.get("latitude") and s.get("longitude"):
         df.append({
+            "id": s["id"],
             "name": s["name"],
             "city": s.get("city", ""),
             "category": s.get("category", ""),
             "description": s.get("description", ""),
             "lat": s["latitude"],
             "lon": s["longitude"],
+            "is_recommend": s.get("is_recommend", True),
         })
 
 # ===== 地图 =====
@@ -85,14 +82,13 @@ else:
 st.divider()
 
 # ===== 店铺列表 =====
-# ===== 店铺列表 =====
 st.subheader("📍 店铺列表")
 if df:
     for d in df:
         with st.expander(f"{d['name']} · {d['city']} · {d['category']}", expanded=False):
-            st.write(d.get("description", ""))
+            st.write(f"**推荐理由：** {d.get('description', '')}")
             st.caption(f"坐标：{d['lat']}, {d['lon']}")
-            
+
             # 导航按钮
             st.link_button(
                 "🚗 用 Google Maps 导航",
@@ -100,4 +96,3 @@ if df:
             )
 else:
     st.info("还没有人推荐店铺。")
-    st.divider()
