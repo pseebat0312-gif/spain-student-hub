@@ -3,9 +3,20 @@ import streamlit as st
 def apply_sidebar_style():
     st.markdown("""
     <style>
-        /* ===== 全站背景：淡绿渐变 ===== */
+        /* ===== 全站背景：深绿到黑渐变 ===== */
         .stApp {
-            background: linear-gradient(135deg, #f0f9f4 0%, #ffffff 50%, #e8f5ec 100%);
+            background: linear-gradient(135deg, #0d2818 0%, #1a4d2e 50%, #0a1f12 100%) !important;
+            background-attachment: fixed !important;
+        }
+        
+        /* 正文文字颜色：白色 */
+        .stApp, .stApp p, .stApp div, .stApp span {
+            color: #ffffff !important;
+        }
+        
+        /* 标题颜色：浅绿 */
+        h1, h2, h3 {
+            color: #a0d8b3 !important;
         }
 
         /* ===== 侧边栏 ===== */
