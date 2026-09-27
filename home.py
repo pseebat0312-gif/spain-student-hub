@@ -17,7 +17,7 @@ st.markdown("### 👋 刚到西班牙？先看看这个")
 
 st.markdown(f"""
 <a href=" " target="_self">
-    < img src="{"https://i.postimg.cc/CLQy7rxg/2.jpg"}" style="width:100%; border-radius:12px; cursor:pointer; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+    < img src="{https://i.postimg.cc/CLQy7rxg/2.jpg}" style="width:100%; border-radius:12px; cursor:pointer; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
 </a >
 """, unsafe_allow_html=True)
 
