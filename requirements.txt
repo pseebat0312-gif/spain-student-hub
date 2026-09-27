@@ -11,4 +11,6 @@ bcrypt
 feedparser
 openai
 pydeck
+streamlit-folium
+folium
 
