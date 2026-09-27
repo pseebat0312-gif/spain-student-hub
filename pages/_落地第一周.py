@@ -41,7 +41,7 @@ with st.expander("📱 手机卡推荐器", expanded=True):
             st.markdown("👉 [点此进入 Orange 官网](https://www.orange.es)")
             st.markdown("👉 [点此进入 Vodafone 官网](https://www.vodafone.es)")
 
-st.divider
+st.divider()
 
 col1, col2, col3 = st.columns(3)
 
