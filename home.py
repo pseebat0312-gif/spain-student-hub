@@ -23,7 +23,11 @@ st.set_page_config(page_title="西班牙留学生工具站", page_icon="🇪🇸
 st.title("🇪🇸 西班牙留学生一站式工具站")
 st.write("¡Bienvenidos! 请从左侧选择你要用的工具。")
 
-st.divider()
+st.markdown("""
+<div style="text-align: center; margin: 20px 0;">
+    <span style="color: #4a7c59; font-size: 20px;">✦ ✧ ✦ ✧ ✦</span>
+</div>
+""", unsafe_allow_html=True)
 
 # 每日更新入口
 st.markdown("""
@@ -101,7 +105,11 @@ with st.sidebar:
                     else:
                         st.warning("请输入邮箱和密码")
                 
-                st.divider()
+                st.markdown("""
+<div style="text-align: center; margin: 20px 0;">
+    <span style="color: #4a7c59; font-size: 20px;">✦ ✧ ✦ ✧ ✦</span>
+</div>
+""", unsafe_allow_html=True)
                 # ===== 注册（默认隐藏，点击才展开）=====
                 if st.button("没有账号？点这里注册", key="show_reg_btn"):
                     st.session_state["show_reg"] = True
@@ -161,7 +169,11 @@ if is_user_logged_in():
         st.session_state["logged_in_once"] = True
 
 # ===== 时钟 =====
-st.divider()
+st.markdown("""
+<div style="text-align: center; margin: 20px 0;">
+    <span style="color: #4a7c59; font-size: 20px;">✦ ✧ ✦ ✧ ✦</span>
+</div>
+""", unsafe_allow_html=True)
 st.subheader("🕐 现在时间")
 clock_html = """
 <div style="display:flex; gap:20px; flex-wrap:wrap;">
@@ -206,7 +218,11 @@ st.caption(f"📊 **{today.month}月{today.day}日** · 今年已过 {day_of_yea
 st.progress(progress)
 
 # ===== 专属空间 =====
-st.divider()
+st.markdown("""
+<div style="text-align: center; margin: 20px 0;">
+    <span style="color: #4a7c59; font-size: 20px;">✦ ✧ ✦ ✧ ✦</span>
+</div>
+""", unsafe_allow_html=True)
 st.subheader("📂 我的专属空间")
 if is_user_logged_in():
     st.write(f"欢迎回来，{user_email}")
@@ -217,7 +233,11 @@ else:
 
 
 # ===== 倒计时卡片 =====
-st.divider()
+st.markdown("""
+<div style="text-align: center; margin: 20px 0;">
+    <span style="color: #4a7c59; font-size: 20px;">✦ ✧ ✦ ✧ ✦</span>
+</div>
+""", unsafe_allow_html=True)
 st.subheader("⏳ 我的倒计时")
 
 if is_user_logged_in():
@@ -302,8 +322,18 @@ if future_dates:
     st.caption(f"⏳ 距离 **{next_info['full']}** 还有 **{days_to_next}** 天")
 
 # ===== 日历 =====
-st.divider()
-st.subheader("📅 点击日期查看详情")
+st.markdown("""
+<div style="text-align: center; margin: 20px 0;">
+    <span style="color: #4a7c59; font-size: 20px;">✦ ✧ ✦ ✧ ✦</span>
+</div>
+""", unsafe_allow_html=True)
+st.markdown("""
+<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+    <span style="font-size: 32px;">✨</span>
+    <h2 style="color: #a0d8b3; margin: 0;">规划你的专属中西文化日历</h2>
+    <span style="font-size: 32px;">✨</span>
+</div>
+""", unsafe_allow_html=True)
 
 if is_user_logged_in():
     schedules = safe_execute(
@@ -361,7 +391,11 @@ if not is_user_logged_in():
 # ===== 当天详情 =====
 if "clicked_date" in st.session_state and st.session_state["clicked_date"]:
     clicked_date = st.session_state["clicked_date"]
-    st.divider()
+    st.markdown("""
+<div style="text-align: center; margin: 20px 0;">
+    <span style="color: #4a7c59; font-size: 20px;">✦ ✧ ✦ ✧ ✦</span>
+</div>
+""", unsafe_allow_html=True)
     st.subheader(f"📌 {clicked_date} 的详情")
 
     if clicked_date in festivals:
