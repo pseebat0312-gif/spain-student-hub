@@ -63,7 +63,7 @@ if st.user.is_logged_in:
 else:
     st.info("🔒 登录后可以管理你的专属空间")
 
-# ===== 功能导航：词云气泡 =====
+# ===== 功能导航：气泡云 =====
 st.divider()
 st.subheader("🚀 功能导航")
 
@@ -73,48 +73,52 @@ st.markdown("""
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 12px;
-        padding: 20px 0;
+        align-items: center;
+        gap: 14px;
+        padding: 25px 10px;
+        min-height: 320px;
     }
     .bubble {
-        display: inline-block;
-        padding: 14px 22px;
-        border-radius: 50px;
-        color: white;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #ffffff !important;
         font-weight: bold;
-        font-size: 15px;
-        cursor: pointer;
+        text-decoration: none !important;
+        border-radius: 50%;
         transition: all 0.3s ease;
-        text-decoration: none;
-        border: 2px solid rgba(255,255,255,0.1);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.35);
+        border: 2px solid rgba(255,255,255,0.15);
+        padding: 12px;
+        line-height: 1.2;
     }
     .bubble:hover {
-        transform: translateY(-4px) scale(1.08);
-        box-shadow: 0 8px 20px rgba(74, 124, 89, 0.6);
+        transform: scale(1.15);
+        box-shadow: 0 10px 25px rgba(74, 124, 89, 0.8);
         border-color: #a0d8b3;
+        z-index: 10;
     }
-    .c1 { background: #2f5d3a; }
-    .c2 { background: #4a7c59; }
-    .c3 { background: #6b9e7a; }
-    .c4 { background: #1a4d2e; }
-    .c5 { background: #3d6b4a; }
-    .c6 { background: #5a8f6b; }
+    .b1 { background: #2f5d3a; width: 130px; height: 130px; font-size: 15px; }
+    .b2 { background: #4a7c59; width: 110px; height: 110px; font-size: 14px; }
+    .b3 { background: #6b9e7a; width: 95px; height: 95px; font-size: 13px; }
+    .b4 { background: #1a4d2e; width: 120px; height: 120px; font-size: 14px; }
+    .b5 { background: #3d6b4a; width: 100px; height: 100px; font-size: 13px; }
+    .b6 { background: #5a8f6b; width: 115px; height: 115px; font-size: 14px; }
+    .b7 { background: #264d33; width: 90px; height: 90px; font-size: 12px; }
 </style>
-""", unsafe_allow_html=True)
 
-st.markdown("""
 <div class="bubble-cloud">
-    <a href=" " class="bubble c1">🏛️ 学校导览</a >
-    <a href="/2_ai检测器" class="bubble c2">🔍 AI 检测器</a >
-    <a href="/3_办事导览" class="bubble c3">📋 办事导览</a >
-    <a href="/4_简易翻译器" class="bubble c4">🌐 翻译器</a >
-    <a href="/5_日常生活导览" class="bubble c5">🎭 日常生活</a >
-    <a href="/6_留子二手街区" class="bubble c6">🛒 二手街区</a >
-    <a href="/7_社区" class="bubble c1">💬 社区</a >
-    <a href="/8_学习区" class="bubble c2">📚 学习区</a >
-    <a href="/9_个人中心" class="bubble c3">👤 个人中心</a >
-    <a href="/留言板" class="bubble c4">✍️ 留言板</a >
+    <a href=" " target="_self" class="bubble b1">🏛️<br>学校导览</a >
+    <a href="/2_ai检测器" target="_self" class="bubble b2">🔍<br>AI 检测器</a >
+    <a href="/3_办事导览" target="_self" class="bubble b3">📋<br>办事导览</a >
+    <a href="/4_简易翻译器" target="_self" class="bubble b4">🌐<br>翻译器</a >
+    <a href="/5_日常生活导览" target="_self" class="bubble b5">🎭<br>日常生活</a >
+    <a href="/6_留子二手街区" target="_self" class="bubble b6">🛒<br>二手街区</a >
+    <a href="/7_社区" target="_self" class="bubble b7">💬<br>社区</a >
+    <a href="/8_学习区" target="_self" class="bubble b1">📚<br>学习区</a >
+    <a href="/9_个人中心" target="_self" class="bubble b5">👤<br>个人中心</a >
+    <a href="/留言板" target="_self" class="bubble b3">✍️<br>留言板</a >
 </div>
 """, unsafe_allow_html=True)
 
