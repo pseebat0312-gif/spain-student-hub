@@ -149,14 +149,16 @@ def apply_sidebar_style():
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
-        /* 日历：整个卡片悬停时轻微浮起 */
-        div[data-testid="stCustomComponentV1"] {
+        div[data-testid="stCustomComponentV1"],
+        div[data-testid="stCustomComponentV2"],
+        iframe[title="streamlit_calendar.calendar"] {
             border-radius: 16px !important;
-            padding: 10px !important;
             transition: all 0.3s ease !important;
             box-shadow: 0 4px 12px rgba(74, 124, 89, 0.15) !important;
         }
-        div[data-testid="stCustomComponentV1"]:hover {
+        div[data-testid="stCustomComponentV1"]:hover,
+        div[data-testid="stCustomComponentV2"]:hover,
+        iframe[title="streamlit_calendar.calendar"]:hover {
             transform: translateY(-4px) !important;
             box-shadow: 0 12px 28px rgba(74, 124, 89, 0.4) !important;
         }
