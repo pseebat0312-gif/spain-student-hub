@@ -43,37 +43,28 @@ def safe_execute(query, default=None):
         st.error(f"数据库请求失败：{e}")
         return default if default is not None else []
 
+# ===== 恢复登录状态 =====
+if "user" in st.query_params and "qq_user_email" not in st.session_state:
+    st.session_state["qq_user_email"] = st.query_params["user"]
+
 # ===== 侧边栏登录区 =====
 with st.sidebar:
     if not is_user_logged_in():
         st.info("💡 登录后可使用全部功能")
         
+        # 两个并排的登录方式
         col_a, col_b = st.columns(2)
         with col_a:
             if st.button("🔵 Google 登录", use_container_width=True):
                 st.login()
         with col_b:
-            st.session_state["show_qq_login"] = True
+            if st.button("📧 QQ 邮箱", use_container_width=True):
+                st.session_state["show_qq_login"] = True
         
+        # QQ 邮箱登录区
         if st.session_state.get("show_qq_login", False):
             with st.expander("📧 QQ 邮箱登录", expanded=True):
-                # 注册
-                new_email = st.text_input("注册邮箱：", key="reg_email")
-                new_pwd = st.text_input("设置密码：", type="password", key="reg_pwd")
-                if st.button("注册", key="reg_btn", use_container_width=True):
-                    if new_email and new_pwd:
-                        try:
-                            hashed = hash_password(new_pwd)
-                            supabase.table("app_users").insert({
-                                "email": new_email,
-                                "password": hashed
-                            }).execute()
-                            st.success("✅ 注册成功，请返回登录")
-                        except Exception as e:
-                            st.error(f"注册失败：{e}")
-                
-                st.divider()
-                # 登录
+                # ===== 登录 =====
                 qq_email = st.text_input("邮箱：", key="qq_email_input")
                 qq_password = st.text_input("密码：", type="password", key="qq_pwd_input")
                 if st.button("登录", key="qq_login_btn", use_container_width=True):
@@ -83,16 +74,38 @@ with st.sidebar:
                         )
                         if user and verify_password(qq_password, user[0]["password"]):
                             st.session_state["qq_user_email"] = qq_email
+                            st.query_params["user"] = qq_email
                             st.success("✅ 登录成功")
                             st.rerun()
                         else:
-                            st.write("--- 调试信息 ---")
-                            st.write(f"输入的密码：{qq_password}")
-                            st.write(f"数据库里的哈希：{user[0]['password'] if user else '没找到用户'}")
-                            st.write(f"验证结果：{verify_password(qq_password, user[0]['password']) if user else 'N/A'}")
                             st.error("❌ 邮箱或密码错误")
+                    else:
+                        st.warning("请输入邮箱和密码")
+                
+                st.divider()
+                # ===== 注册（默认隐藏，点击才展开）=====
+                if st.button("没有账号？点这里注册", key="show_reg_btn"):
+                    st.session_state["show_reg"] = True
+                
+                if st.session_state.get("show_reg", False):
+                    new_email = st.text_input("注册邮箱：", key="reg_email")
+                    new_pwd = st.text_input("设置密码：", type="password", key="reg_pwd")
+                    if st.button("注册", key="reg_btn", use_container_width=True):
+                        if new_email and new_pwd:
+                            try:
+                                hashed = hash_password(new_pwd)
+                                supabase.table("app_users").insert({
+                                    "email": new_email,
+                                    "password": hashed
+                                }).execute()
+                                st.success("✅ 注册成功，请返回上方登录")
+                            except Exception as e:
+                                st.error(f"注册失败（邮箱可能已被占用）：{e}")
+                        else:
+                            st.warning("邮箱和密码都不能为空")
+
     else:
-        # 已登录：显示用户信息
+        # ===== 已登录：显示用户信息 =====
         if st.user.is_logged_in:
             user_email = st.user.email
         else:
@@ -109,17 +122,16 @@ with st.sidebar:
             display_emoji = "👤"
         
         st.page_link("pages/9_个人中心.py", label=f"{display_emoji} {display_name}")
+        
+        if user_email == ADMIN_EMAIL:
+            st.caption("🛡️ 管理员")
+        
         if st.button("退出登录"):
-            if is_user_logged_in():
+            if st.user.is_logged_in:
                 st.logout()
             st.session_state.pop("qq_user_email", None)
+            st.query_params.clear()
             st.rerun()
-        
-        st.page_link("pages/9_个人中心.py", label=f"{display_emoji} {display_name}")
-        if st.user.email == ADMIN_EMAIL:
-            st.caption("🛡️ 管理员")
-        if st.button("退出登录"):
-            st.logout()
 
 if is_user_logged_in():
     # 记录本次登录（用 session_state 防止每次刷新都写一条）

@@ -35,7 +35,7 @@ else:
 if not user_email:
     st.warning("请先登录。")
     st.stop()
-    
+
 
 # ---------- 个人资料 ----------
 st.divider()
@@ -44,7 +44,7 @@ st.subheader("👤 个人资料设置")
 profile = safe_execute(
     supabase.table("user_profiles")
     .select("*")
-    .eq("email", st.user.email)
+    .eq("email", user_email)
 )
 
 if profile:
