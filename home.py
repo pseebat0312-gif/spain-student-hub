@@ -17,12 +17,32 @@ st.markdown("### 👋 刚到西班牙？先看看这个")
 
 image_url = "https://i.postimg.cc/CLQy7rxg/2.jpg"
 
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    st.image(image_url, use_container_width=True)
-    if st.button("🚀 进入落地第一周攻略", type="primary", use_container_width=True):
-        st.switch_page("pages/_落地第一周.py")
+# ===== 首页海报：点击图片进入 =====
+st.markdown("### 👋 刚到西班牙？先看看这个")
 
+# 用 CSS 让按钮变成“点击图片”的感觉
+st.markdown("""
+<style>
+    div[data-testid="stButton"] > button {
+        background-color: transparent !important;
+        color: transparent !important;
+        border: none !important;
+        height: 60px !important;
+        margin-top: -60px !important;
+        position: relative !important;
+        z-index: 10 !important;
+        cursor: pointer !important;
+    }
+    div[data-testid="stButton"] > button:hover {
+        background-color: rgba(74, 124, 89, 0.2) !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+st.image(image_url, use_container_width=True)
+
+if st.button("点击进入", key="poster_click"):
+    st.switch_page("pages/_落地第一周.py")
 
 
 @st.cache_resource

@@ -4,6 +4,9 @@ import sys
 sys.path.append("..")
 from styles import apply_sidebar_style
 apply_sidebar_style()
+
+st.page_link("home.py", label="⬅️ 返回首页", icon="🏠")
+
 st.set_page_config(page_title="二手市场", page_icon="🛒")
 st.title("🛒 留学生二手市场")
 st.write("此平台仅作为沟通媒介，不涉及交易，请通过买家提供的联系方式进行后续交易。")

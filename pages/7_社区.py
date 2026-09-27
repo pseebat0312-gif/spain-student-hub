@@ -6,6 +6,10 @@ apply_sidebar_style()
 import streamlit as st
 from supabase import create_client
 
+
+st.page_link("home.py", label="⬅️ 返回首页", icon="🏠")
+
+
 st.set_page_config(page_title="留学生社区", page_icon="💬")
 st.title("💬 留学生互助社区")
 st.write("分享你的经验、踩过的坑，或者向其他人求助。")

@@ -4,6 +4,9 @@ import sys
 sys.path.append("..")
 from styles import apply_sidebar_style
 apply_sidebar_style()
+
+st.page_link("home.py", label="⬅️ 返回首页", icon="🏠")
+
 st.set_page_config(page_title="留言板", page_icon="✍️")
 st.title("✍️ 留言板")
 st.write("欢迎给作者留言！你的留言默认是私密的，只有作者能看见。作者如果觉得内容不错，可能会把它公开~")

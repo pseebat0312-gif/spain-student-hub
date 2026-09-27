@@ -1,5 +1,7 @@
 import streamlit as st
 
+st.page_link("home.py", label="⬅️ 返回首页", icon="🏠")
+
 st.set_page_config(page_title="落地第一周", page_icon="🧳")
 st.title("🧳 落地第一周攻略")
 st.write("按顺序来，不慌。每一项都可以点开看详情。")

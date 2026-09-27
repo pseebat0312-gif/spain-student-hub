@@ -4,6 +4,8 @@ sys.path.append("..")
 from styles import apply_sidebar_style
 apply_sidebar_style()
 
+st.page_link("home.py", label="⬅️ 返回首页", icon="🏠")
+
 st.set_page_config(page_title="西语学习资料", page_icon="📚")
 st.title("📚 西班牙语学习资料汇总")
 st.write("从零基础到 DELE 考试，这里整理了最实用的免费资源。")

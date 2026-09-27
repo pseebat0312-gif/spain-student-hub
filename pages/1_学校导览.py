@@ -4,6 +4,8 @@ sys.path.append("..")
 from styles import apply_sidebar_style
 apply_sidebar_style()
 
+st.page_link("home.py", label="⬅️ 返回首页", icon="🏠")
+
 st.set_page_config(page_title="学校快速导览", page_icon="🏛️")
 st.title("🏛️ 大学校园快速导览")
 st.write("请选择你的学校，查看对应的官方入口。")

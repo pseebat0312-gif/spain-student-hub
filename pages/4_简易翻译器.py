@@ -4,6 +4,9 @@ import sys
 sys.path.append("..")
 from styles import apply_sidebar_style
 apply_sidebar_style()
+
+st.page_link("home.py", label="⬅️ 返回首页", icon="🏠")
+
 st.set_page_config(page_title="简易翻译器", page_icon="🌐")
 st.title("🌐 简易翻译器")
 st.write("支持中文、英文、西班牙语互译。")

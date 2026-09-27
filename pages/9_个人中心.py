@@ -4,6 +4,8 @@ from supabase import create_client
 from styles import apply_sidebar_style
 apply_sidebar_style()
 
+st.page_link("home.py", label="⬅️ 返回首页", icon="🏠")
+
 def safe_execute(query, default=None):
     """统一包裹 Supabase 查询，出错不崩页面"""
     try:
