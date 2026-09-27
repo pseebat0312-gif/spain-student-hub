@@ -47,7 +47,7 @@ with st.sidebar:
             st.caption("🛡️ 管理员")
         if st.button("退出登录"):
             st.logout()
-            
+
 if st.user.is_logged_in:
     # 记录本次登录（用 session_state 防止每次刷新都写一条）
     if "logged_in_once" not in st.session_state:
@@ -63,6 +63,64 @@ if st.user.is_logged_in:
 else:
     st.info("🔒 登录后可以管理你的专属空间")
 
+# ===== 功能卡片导航 =====
+st.divider()
+st.subheader("🚀 快速导航")
+
+st.markdown("""
+<style>
+    .card-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+        margin-top: 15px;
+    }
+    .card {
+        background: #1a1a2e;
+        border: 2px solid #4a7c59;
+        border-radius: 12px;
+        padding: 14px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+    .card:hover {
+        border-color: #a0d8b3;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(74, 124, 89, 0.4);
+    }
+    .card-icon { font-size: 28px; margin-bottom: 6px; }
+    .card-title { font-size: 14px; font-weight: bold; color: #ffffff; }
+</style>
+""", unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.markdown('<div class="card"><div class="card-icon">🔍</div><div class="card-title">AI 检测器</div></div>', unsafe_allow_html=True)
+    if st.button("进入", key="nav_ai", use_container_width=True):
+        st.switch_page("pages/2_ai检测器.py")
+with col2:
+    st.markdown('<div class="card"><div class="card-icon">🌐</div><div class="card-title">翻译器</div></div>', unsafe_allow_html=True)
+    if st.button("进入", key="nav_trans", use_container_width=True):
+        st.switch_page("pages/简易翻译器.py")
+with col3:
+    st.markdown('<div class="card"><div class="card-icon">🏛️</div><div class="card-title">学校导览</div></div>', unsafe_allow_html=True)
+    if st.button("进入", key="nav_school", use_container_width=True):
+        st.switch_page("pages/1_学校导览.py")
+
+col4, col5, col6 = st.columns(3)
+with col4:
+    st.markdown('<div class="card"><div class="card-icon">💬</div><div class="card-title">社区</div></div>', unsafe_allow_html=True)
+    if st.button("进入", key="nav_community", use_container_width=True):
+        st.switch_page("pages/7_社区.py")
+with col5:
+    st.markdown('<div class="card"><div class="card-icon">🛒</div><div class="card-title">二手市场</div></div>', unsafe_allow_html=True)
+    if st.button("进入", key="nav_market", use_container_width=True):
+        st.switch_page("pages/二手市场.py")
+with col6:
+    st.markdown('<div class="card"><div class="card-icon">✍️</div><div class="card-title">留言板</div></div>', unsafe_allow_html=True)
+    if st.button("进入", key="nav_message", use_container_width=True):
+        st.switch_page("pages/留言板.py")
+        
 # ===== 时钟 =====
 st.divider()
 st.subheader("🕐 现在时间")
