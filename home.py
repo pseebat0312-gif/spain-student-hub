@@ -12,6 +12,9 @@ apply_sidebar_style()
 
 from common import supabase, user_email, is_user_logged_in
 
+from styles import apply_sidebar_style
+apply_sidebar_style()
+
 def is_user_logged_in():
     """判断用户是否登录（Google 或 QQ 都算）"""
     return st.user.is_logged_in or ("qq_user_email" in st.session_state)
