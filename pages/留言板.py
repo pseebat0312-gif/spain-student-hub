@@ -4,7 +4,9 @@ import sys
 sys.path.append("..")
 from styles import apply_sidebar_style
 apply_sidebar_style()
-
+import sys
+sys.path.append("..")
+from common import supabase, user_email, is_user_logged_in
 # 统一获取当前登录用户的邮箱
 if st.user.is_logged_in:
     user_email = st.user.email

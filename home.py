@@ -10,6 +10,8 @@ from email.mime.text import MIMEText
 from crypto_utils import hash_password, verify_password
 apply_sidebar_style()
 
+from common import supabase, user_email, is_user_logged_in
+
 def is_user_logged_in():
     """判断用户是否登录（Google 或 QQ 都算）"""
     return st.user.is_logged_in or ("qq_user_email" in st.session_state)
@@ -31,7 +33,7 @@ st.markdown("""
 if st.button("👉 点击查看今日更新", use_container_width=True):
     st.switch_page("pages/_每日更新.py")
 
-    
+
 # ===== 首页海报 =====
 st.markdown("### 👋 刚到西班牙？先看看这个")
 

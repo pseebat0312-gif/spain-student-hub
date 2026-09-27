@@ -12,6 +12,9 @@ else:
 if not user_email:
     st.warning("请先登录。")
     st.stop()
+    import sys
+sys.path.append("..")
+from common import supabase, user_email, is_user_logged_in
 st.page_link("home.py", label="⬅️ 返回首页", icon="🏠")
 
 st.set_page_config(page_title="西班牙办事快速导览", page_icon="🏛️")

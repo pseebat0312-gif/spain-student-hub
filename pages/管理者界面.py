@@ -3,7 +3,9 @@ from supabase import create_client
 
 st.set_page_config(page_title="管理后台", page_icon="🛠️")
 st.title("🛠️ 管理后台")
-
+import sys
+sys.path.append("..")
+from common import supabase, user_email, is_user_logged_in
 # 统一获取当前登录用户的邮箱
 if st.user.is_logged_in:
     user_email = st.user.email
