@@ -115,64 +115,93 @@ st.subheader("🚀 功能导航")
 
 st.markdown("""
 <style>
-    /* 把按钮做成圆形气泡 */
+    /* 圆形气泡按钮：大小不一，深绿浅绿交错 */
     div[data-testid="stButton"] > button {
         border-radius: 50% !important;
-        width: 100px !important;
-        height: 100px !important;
-        padding: 8px !important;
         white-space: normal !important;
-        font-size: 12px !important;
         font-weight: bold !important;
         color: #ffffff !important;
-        background-color: #4a7c59 !important;
         border: 2px solid #a0d8b3 !important;
-        transition: all 0.25s ease !important;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 6px 14px rgba(0,0,0,0.4) !important;
         line-height: 1.2 !important;
+        padding: 10px !important;
     }
     div[data-testid="stButton"] > button:hover {
-        transform: scale(1.1) !important;
-        background-color: #6b9e7a !important;
+        transform: scale(1.15) !important;
+        background-color: #a0d8b3 !important;
+        color: #1a1a2e !important;
         border-color: #ffffff !important;
     }
+    /* 大小和颜色错落 */
+    .bubble-lg button { width: 110px !important; height: 110px !important; font-size: 13px !important; background-color: #2f5d3a !important; }
+    .bubble-md button { width: 95px !important; height: 95px !important; font-size: 12px !important; background-color: #4a7c59 !important; }
+    .bubble-sm button { width: 80px !important; height: 80px !important; font-size: 11px !important; background-color: #6b9e7a !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# 用列来摆放，5 列，2 行
-row1 = st.columns(5)
-with row1[0]:
-    if st.button("🏛️\n学校导览", key="nav_school"):
+# 第一行：4 个（大中小交错）
+r1 = st.columns(4)
+with r1[0]:
+    st.markdown('<div class="bubble-lg">', unsafe_allow_html=True)
+    if st.button("🏛️\n学校导览", key="n1"):
         st.switch_page("pages/1_学校导览.py")
-with row1[1]:
-    if st.button("🔍\nAI 检测器", key="nav_ai"):
+    st.markdown('</div>', unsafe_allow_html=True)
+with r1[1]:
+    st.markdown('<div class="bubble-md">', unsafe_allow_html=True)
+    if st.button("🔍\nAI 检测器", key="n2"):
         st.switch_page("pages/2_ai检测器.py")
-with row1[2]:
-    if st.button("📋\n办事导览", key="nav_admin"):
+    st.markdown('</div>', unsafe_allow_html=True)
+with r1[2]:
+    st.markdown('<div class="bubble-sm">', unsafe_allow_html=True)
+    if st.button("📋\n办事导览", key="n3"):
         st.switch_page("pages/3_办事导览.py")
-with row1[3]:
-    if st.button("🌐\n翻译器", key="nav_trans"):
+    st.markdown('</div>', unsafe_allow_html=True)
+with r1[3]:
+    st.markdown('<div class="bubble-lg">', unsafe_allow_html=True)
+    if st.button("🌐\n翻译器", key="n4"):
         st.switch_page("pages/4_简易翻译器.py")
-with row1[4]:
-    if st.button("🎭\n日常生活", key="nav_daily"):
-        st.switch_page("pages/5_日常生活导览.py")
+    st.markdown('</div>', unsafe_allow_html=True)
 
-row2 = st.columns(5)
-with row2[0]:
-    if st.button("🛒\n二手街区", key="nav_market"):
+# 第二行：3 个（往中间错开）
+r2 = st.columns([1, 1, 1, 1])
+with r2[0]:
+    st.write("")  # 空
+with r2[1]:
+    st.markdown('<div class="bubble-md">', unsafe_allow_html=True)
+    if st.button("🎭\n日常生活", key="n5"):
+        st.switch_page("pages/5_日常生活导览.py")
+    st.markdown('</div>', unsafe_allow_html=True)
+with r2[2]:
+    st.markdown('<div class="bubble-lg">', unsafe_allow_html=True)
+    if st.button("🛒\n二手街区", key="n6"):
         st.switch_page("pages/6_留子二手街区.py")
-with row2[1]:
-    if st.button("💬\n社区", key="nav_community"):
+    st.markdown('</div>', unsafe_allow_html=True)
+with r2[3]:
+    st.write("")  # 空
+
+# 第三行：4 个（大中小交错）
+r3 = st.columns(4)
+with r3[0]:
+    st.markdown('<div class="bubble-sm">', unsafe_allow_html=True)
+    if st.button("💬\n社区", key="n7"):
         st.switch_page("pages/7_社区.py")
-with row2[2]:
-    if st.button("📚\n学习区", key="nav_study"):
+    st.markdown('</div>', unsafe_allow_html=True)
+with r3[1]:
+    st.markdown('<div class="bubble-lg">', unsafe_allow_html=True)
+    if st.button("📚\n学习区", key="n8"):
         st.switch_page("pages/8_学习区.py")
-with row2[3]:
-    if st.button("👤\n个人中心", key="nav_profile"):
+    st.markdown('</div>', unsafe_allow_html=True)
+with r3[2]:
+    st.markdown('<div class="bubble-md">', unsafe_allow_html=True)
+    if st.button("👤\n个人中心", key="n9"):
         st.switch_page("pages/9_个人中心.py")
-with row2[4]:
-    if st.button("✍️\n留言板", key="nav_message"):
+    st.markdown('</div>', unsafe_allow_html=True)
+with r3[3]:
+    st.markdown('<div class="bubble-sm">', unsafe_allow_html=True)
+    if st.button("✍️\n留言板", key="n10"):
         st.switch_page("pages/留言板.py")
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
 
