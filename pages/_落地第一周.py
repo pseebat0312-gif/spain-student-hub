@@ -14,6 +14,29 @@ st.write("刚到西班牙，按顺序来，不慌。每一项一进来就能看�
 
 st.divider()
 
+# ===== 底部：互动推荐 =====
+st.divider()
+st.subheader("🎯 不知道选哪个？点这里让我推荐")
+
+with st.expander("📱 手机卡推荐器", expanded=False):
+    col_a, col_b, col_c = st.columns(3)
+    with col_a:
+        stay = st.selectbox("停留时长：", ["少于1个月", "3-6个月", "1年以上"], key="stay")
+    with col_b:
+        budget = st.selectbox("月预算：", ["<10欧", "10-20欧", "20-30欧"], key="budget")
+    with col_c:
+        data_need = st.selectbox("流量需求：", ["<10GB", "10-30GB", ">30GB"], key="data")
+    
+    if st.button("🔍 推荐", key="recommend"):
+        if stay == "少于1个月":
+            st.success("推荐：Lycamobile / Lebara 预付费卡（机场或烟草店，10欧）")
+        elif budget == "<10欧":
+            st.success("推荐：Digi（€3/月3GB 起，最便宜）")
+        elif data_need == ">30GB":
+            st.success("推荐：O2 或 Lowi（€20/月50-60GB，信号好）")
+        else:
+            st.success("推荐：Orange Joven 或 Vodafone Yu（€15-19/月，学生优惠）")
+
 # ===== 三列布局 =====
 col1, col2, col3 = st.columns(3)
 
@@ -88,25 +111,3 @@ with col3:
     st.info("💡 续居留必须提供医保，建议提前办。")
 
 
-# ===== 底部：互动推荐 =====
-st.divider()
-st.subheader("🎯 不知道选哪个？点这里让我推荐")
-
-with st.expander("📱 手机卡推荐器", expanded=False):
-    col_a, col_b, col_c = st.columns(3)
-    with col_a:
-        stay = st.selectbox("停留时长：", ["少于1个月", "3-6个月", "1年以上"], key="stay")
-    with col_b:
-        budget = st.selectbox("月预算：", ["<10欧", "10-20欧", "20-30欧"], key="budget")
-    with col_c:
-        data_need = st.selectbox("流量需求：", ["<10GB", "10-30GB", ">30GB"], key="data")
-    
-    if st.button("🔍 推荐", key="recommend"):
-        if stay == "少于1个月":
-            st.success("推荐：Lycamobile / Lebara 预付费卡（机场或烟草店，10欧）")
-        elif budget == "<10欧":
-            st.success("推荐：Digi（€3/月3GB 起，最便宜）")
-        elif data_need == ">30GB":
-            st.success("推荐：O2 或 Lowi（€20/月50-60GB，信号好）")
-        else:
-            st.success("推荐：Orange Joven 或 Vodafone Yu（€15-19/月，学生优惠）")
