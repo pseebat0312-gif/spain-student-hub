@@ -3,43 +3,41 @@ import streamlit as st
 def apply_sidebar_style():
     st.markdown("""
     <style>
-        /* ===== 全站背景：深绿到黑渐变 ===== */
-        .stApp {
-            background: linear-gradient(135deg, #0d2818 0%, #1a4d2e 50%, #0a1f12 100%) !important;
-            background-attachment: fixed !important;
+        /* ===== 全站背景：纯黑 ===== */
+        .stApp, [data-testid="stAppViewContainer"] {
+            background: #000000 !important;
         }
         
-        /* 正文文字颜色：白色 */
-        .stApp, .stApp p, .stApp div, .stApp span {
+        /* ===== 全站字体：衬线体（serif） ===== */
+        * {
+            font-family: 'Georgia', 'Times New Roman', serif !important;
+        }
+        
+        /* ===== 正文文字：白色 ===== */
+        .stApp, .stApp p, .stApp div, .stApp span, .stApp label {
             color: #ffffff !important;
         }
         
-        /* 标题颜色：浅绿 */
+        /* ===== 标题：金色衬线 ===== */
         h1, h2, h3 {
-            color: #a0d8b3 !important;
+            color: #f5e6a3 !important;
+            font-family: 'Georgia', 'Times New Roman', serif !important;
+            font-weight: 700 !important;
         }
-
+        
         /* ===== 侧边栏 ===== */
         [data-testid="stSidebar"] {
-            background: linear-gradient(180deg, #1a4d2e, #2f5d3a) !important;
-            border-right: 3px solid #4a7c59 !important;
+            background-color: #0a0a0a !important;
+            border-right: 2px solid #4a7c59 !important;
         }
-        [data-testid="stSidebar"] a {
-            color: #ffffff !important;
-            font-weight: bold !important;
-            font-size: 16px !important;
-            border-radius: 10px !important;
-            padding: 8px 12px !important;
-            margin-bottom: 5px !important;
-            display: block !important;
-            text-decoration: none !important;
-            transition: all 0.3s ease !important;
+        
+        
+        /* ===== 折叠框 ===== */
+        div[data-testid="stExpander"] {
+            border-radius: 12px !important;
+            border: 1px solid #4a7c59 !important;
+            background-color: #111111 !important;
         }
-        [data-testid="stSidebar"] a:hover {
-            background-color: #4a7c59 !important;
-            transform: translateX(8px) !important;
-        }
-
         /* ===== 所有按钮：圆润、有阴影、悬停放大 ===== */
         div[data-testid="stButton"] > button {
             border-radius: 12px !important;
@@ -56,25 +54,7 @@ def apply_sidebar_style():
             background-color: #5a8f6b !important;
         }
 
-        /* ===== 折叠框：圆角、淡绿边框 ===== */
-        div[data-testid="stExpander"] {
-            border-radius: 12px !important;
-            border: 1px solid #c8e6d0 !important;
-            background-color: #ffffff !important;
-            box-shadow: 0 2px 8px rgba(74, 124, 89, 0.08) !important;
-        }
-
-        /* ===== 标题 ===== */
-        h1 {
-            color: #1a4d2e !important;
-            font-weight: 800 !important;
-            letter-spacing: -0.5px !important;
-        }
-        h2, h3 {
-            color: #2f5d3a !important;
-            font-weight: 700 !important;
-        }
-
+        
         /* ===== 输入框 ===== */
         div[data-testid="stTextInput"] input {
             border-radius: 10px !important;
