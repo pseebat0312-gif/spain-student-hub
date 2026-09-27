@@ -55,6 +55,21 @@ if st.user.is_logged_in:
             "user_email": st.user.email
         }).execute()
         st.session_state["logged_in_once"] = True
+
+spain_tz = pytz.timezone("Europe/Madrid")
+now = datetime.datetime.now(spain_tz)
+today = now.date()
+year = today.year
+
+days_in_year = 366 if calendar.isleap(year) else 365
+day_of_year = today.timetuple().tm_yday
+days_left = days_in_year - day_of_year
+progress = day_of_year / days_in_year
+
+# ===== 今年进度（紧凑版） =====
+st.caption(f"📊 **{today.month}月{today.day}日** · 今年已过 {day_of_year} 天 · 还剩 **{days_left}** 天")
+st.progress(progress)
+
 # ===== 专属空间 =====
 st.divider()
 st.subheader("📂 我的专属空间")
@@ -74,9 +89,9 @@ st.markdown("""
         flex-wrap: wrap;
         justify-content: center;
         align-items: center;
-        gap: 14px;
-        padding: 25px 10px;
-        min-height: 320px;
+        gap: 8px;
+        padding: 15px 5px;
+        min-height: 180px;
     }
     .bubble {
         display: inline-flex;
@@ -88,24 +103,22 @@ st.markdown("""
         text-decoration: none !important;
         border-radius: 50%;
         transition: all 0.3s ease;
-        box-shadow: 0 6px 15px rgba(0,0,0,0.35);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         border: 2px solid rgba(255,255,255,0.15);
-        padding: 12px;
-        line-height: 1.2;
+        padding: 8px;
+        line-height: 1.1;
     }
     .bubble:hover {
-        transform: scale(1.15);
-        box-shadow: 0 10px 25px rgba(74, 124, 89, 0.8);
+        transform: scale(1.1);
         border-color: #a0d8b3;
-        z-index: 10;
     }
-    .b1 { background: #2f5d3a; width: 130px; height: 130px; font-size: 15px; }
-    .b2 { background: #4a7c59; width: 110px; height: 110px; font-size: 14px; }
-    .b3 { background: #6b9e7a; width: 95px; height: 95px; font-size: 13px; }
-    .b4 { background: #1a4d2e; width: 120px; height: 120px; font-size: 14px; }
-    .b5 { background: #3d6b4a; width: 100px; height: 100px; font-size: 13px; }
-    .b6 { background: #5a8f6b; width: 115px; height: 115px; font-size: 14px; }
-    .b7 { background: #264d33; width: 90px; height: 90px; font-size: 12px; }
+    .b1 { background: #2f5d3a; width: 85px; height: 85px; font-size: 12px; }
+    .b2 { background: #4a7c59; width: 75px; height: 75px; font-size: 11px; }
+    .b3 { background: #6b9e7a; width: 70px; height: 70px; font-size: 11px; }
+    .b4 { background: #1a4d2e; width: 80px; height: 80px; font-size: 12px; }
+    .b5 { background: #3d6b4a; width: 65px; height: 65px; font-size: 10px; }
+    .b6 { background: #5a8f6b; width: 78px; height: 78px; font-size: 11px; }
+    .b7 { background: #264d33; width: 60px; height: 60px; font-size: 10px; }
 </style>
 
 <div class="bubble-cloud">
@@ -153,19 +166,7 @@ updateClocks();
 st.components.v1.html(clock_html, height=130)
 
 # ===== 今年进度（紧凑版） =====
-spain_tz = pytz.timezone("Europe/Madrid")
-now = datetime.datetime.now(spain_tz)
-today = now.date()
-year = today.year
 
-days_in_year = 366 if calendar.isleap(year) else 365
-day_of_year = today.timetuple().tm_yday
-days_left = days_in_year - day_of_year
-progress = day_of_year / days_in_year
-
-# ===== 今年进度（紧凑版） =====
-st.caption(f"📊 **{today.month}月{today.day}日** · 今年已过 {day_of_year} 天 · 还剩 **{days_left}** 天")
-st.progress(progress)
 
 # ===== 倒计时卡片 =====
 st.divider()
