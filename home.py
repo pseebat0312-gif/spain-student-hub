@@ -86,6 +86,10 @@ with st.sidebar:
                             st.success("✅ 登录成功")
                             st.rerun()
                         else:
+                            st.write("--- 调试信息 ---")
+                            st.write(f"输入的密码：{qq_password}")
+                            st.write(f"数据库里的哈希：{user[0]['password'] if user else '没找到用户'}")
+                            st.write(f"验证结果：{verify_password(qq_password, user[0]['password']) if user else 'N/A'}")
                             st.error("❌ 邮箱或密码错误")
     else:
         # 已登录：显示用户信息
