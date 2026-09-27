@@ -5,9 +5,9 @@ from openai import OpenAI
 from supabase import create_client
 
 # ===== 配置 =====
-SUPABASE_URL = "https://oslvpjboheysjznkhjus.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zbHZwamJvaGV5c2p6bmtoanVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzNDc3OTcsImV4cCI6MjEwNTkyMzc5N30.HCJNbiOAkr4aEnuVa6us2Nsi_dYCOa2oNA4ZenibLtg"
-DEEPSEEK_API_KEY = "sk-6c0eb37bf49049508dfc3f5a9975e7ac"
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
+DEEPSEEK_API_KEY =os.environ.get("DEEPSEEK_API_KEY", "")
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 client = OpenAI(api_key=DEEPSEEK_API_KEY, base_url="https://api.deepseek.com")
