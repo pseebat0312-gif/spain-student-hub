@@ -288,7 +288,7 @@ st.subheader("📅 点击日期查看详情")
 
 if is_user_logged_in():
     schedules = safe_execute(
-        supabase.table("schedules").select("*").eq("user_email", st.user.email)
+        supabase.table("schedules").select("*").eq("user_email", user_email)
     )
 else:
     schedules = []
@@ -353,7 +353,7 @@ if "clicked_date" in st.session_state and st.session_state["clicked_date"]:
         st.caption("这一天没有节日记录。")
 
     day_schedules = safe_execute(
-        supabase.table("schedules").select("*").eq("user_email", st.user.email).eq("event_date", clicked_date).order("event_time", desc=False)
+        supabase.table("schedules").select("*").eq("user_email", user_email).eq("event_date", clicked_date).order("event_time", desc=False)
     )
 
     if day_schedules:
@@ -376,7 +376,7 @@ if "clicked_date" in st.session_state and st.session_state["clicked_date"]:
         if st.button("保存", key=f"save_{clicked_date}"):
             if event_title.strip():
                 supabase.table("schedules").insert({
-                    "user_email": st.user.email,
+                    "user_email": user_email,
                     "event_date": clicked_date,
                     "event_time": str(event_time),
                     "title": event_title
