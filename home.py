@@ -23,8 +23,8 @@ st.set_page_config(page_title="西班牙留学生工具站", page_icon="🇪🇸
 st.title("🇪🇸 西班牙留学生一站式工具站")
 st.write("¡Bienvenidos! 请从左侧选择你要用的工具。")
 
-st.markdown('<link rel="manifest" href="/manifest.json">', unsafe_allow_html=True)
-st.markdown('<link rel="apple-touch-icon" href="/icon-192.png">', unsafe_allow_html=True)
+st.markdown('<link rel="manifest" href="/app/static/manifest.json">', unsafe_allow_html=True)
+st.markdown('<link rel="apple-touch-icon" href="/app/static/icon-192.png">', unsafe_allow_html=True)
 st.markdown('<meta name="theme-color" content="#4a7c59">', unsafe_allow_html=True)
 
 st.markdown("""
