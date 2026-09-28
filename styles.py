@@ -162,5 +162,40 @@ def apply_sidebar_style():
             transform: translateY(-4px) !important;
             box-shadow: 0 12px 28px rgba(74, 124, 89, 0.4) !important;
         }
+        /* ===== 所有 link_button：强制深色（手机端也生效） ===== */
+        div[data-testid="stLinkButton"] > a,
+        div[data-testid="stLinkButton"] a,
+        a[data-testid="stLinkButton"] {
+            background-color: #1a1a2e !important;
+            color: #ffffff !important;
+            border: 2px solid #4a7c59 !important;
+            border-radius: 12px !important;
+            padding: 10px 14px !important;
+            font-weight: bold !important;
+            text-decoration: none !important;
+            display: block !important;
+            text-align: center !important;
+            transition: all 0.3s ease !important;
+        }
+        div[data-testid="stLinkButton"] > a:hover {
+            background-color: #4a7c59 !important;
+            transform: translateY(-2px) !important;
+        }
+
+        /* ===== 手机端覆盖：所有白色背景的按钮、输入框 ===== */
+        @media (max-width: 768px) {
+            div[data-testid="stLinkButton"] > a,
+            div[data-testid="stButton"] > button,
+            div[data-testid="stTextInput"] input,
+            div[data-testid="stSelectbox"] > div > div,
+            div[data-testid="stTextArea"] textarea {
+                background-color: #1a1a2e !important;
+                color: #ffffff !important;
+                border: 2px solid #4a7c59 !important;
+            }
+            div[data-testid="stLinkButton"] > a * {
+                color: #ffffff !important;
+            }
+        }
     </style>
     """, unsafe_allow_html=True)
