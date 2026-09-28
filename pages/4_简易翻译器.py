@@ -4,11 +4,10 @@ import sys
 sys.path.append("..")
 from styles import apply_sidebar_style
 apply_sidebar_style()
-import sys
-sys.path.append("..")
-from common import supabase, user_email, is_user_logged_in
-sys.path.append("..")
-from styles import apply_sidebar_style
+from common import supabase, user_email, is_user_logged_in, render_sidebar, require_login
+
+render_sidebar()
+require_login()
 apply_sidebar_style()
 
 # 统一获取当前登录用户的邮箱

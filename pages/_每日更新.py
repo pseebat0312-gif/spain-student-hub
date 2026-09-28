@@ -3,7 +3,12 @@ from supabase import create_client
 
 import sys
 sys.path.append("..")
-from common import supabase, user_email, is_user_logged_in
+from styles import apply_sidebar_style
+apply_sidebar_style()
+from common import supabase, user_email, is_user_logged_in, render_sidebar, require_login
+
+render_sidebar()
+require_login()
 
 st.set_page_config(page_title="每日更新", page_icon="📰")
 st.page_link("home.py", label="⬅️ 返回首页", icon="🏠")

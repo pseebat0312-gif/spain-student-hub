@@ -6,10 +6,12 @@ apply_sidebar_style()
 
 import sys
 sys.path.append("..")
-from common import supabase, user_email, is_user_logged_in
-sys.path.append("..")
 from styles import apply_sidebar_style
 apply_sidebar_style()
+from common import supabase, user_email, is_user_logged_in, render_sidebar, require_login
+
+render_sidebar()
+require_login()
 
 # 统一获取当前登录用户的邮箱
 if st.user.is_logged_in:
