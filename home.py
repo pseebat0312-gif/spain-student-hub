@@ -392,6 +392,24 @@ if cal_result and cal_result.get("dateClick"):
 if not is_user_logged_in():
     st.stop()
 
+    
+st.divider()
+st.subheader("📌 手动选日期（手机推荐）")
+
+manual_date = st.date_input("选一个日期：", value=today)
+if manual_date:
+    clicked_date = str(manual_date)
+    # 这里复用你“当天详情”的逻辑
+    if clicked_date in festivals:
+        st.success(f"🎊 {festivals[clicked_date]['full']}")
+    # 显示那天的日程
+    day_schedules = supabase.table("schedules")\
+        .select("*")\
+        .eq("user_email", user_email)\
+        .eq("event_date", clicked_date)\
+        .execute().data or []
+    for s in day_schedules:
+        st.write(f"⏰ {s.get('event_time', '')} — {s['title']}")
 # ===== 当天详情 =====
 if "clicked_date" in st.session_state and st.session_state["clicked_date"]:
     clicked_date = st.session_state["clicked_date"]
